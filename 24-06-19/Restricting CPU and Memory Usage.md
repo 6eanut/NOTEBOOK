@@ -15,7 +15,7 @@ python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_
 限制CPU后的命令如下：
 
 ```
-b
+taskset -c 0-9 python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --python_path=models --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
 ```
 
 **`taskset`命令可以将进程绑定到特定的CPU核心上**
