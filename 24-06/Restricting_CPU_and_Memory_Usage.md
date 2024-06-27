@@ -27,3 +27,5 @@ taskset -c 0-9 python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benc
 ```
 ulimit -v 10000000 && python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --python_path=models --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
 ```
+
+[back](../README.md)

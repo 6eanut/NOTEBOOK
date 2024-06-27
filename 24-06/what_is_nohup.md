@@ -1,4 +1,4 @@
-# what is nohup?
+# What is nohup?
 
 **nohup:**
 
@@ -33,3 +33,5 @@ top
 ```
 kill -9 process_id
 ```
+
+[back](../README.md)

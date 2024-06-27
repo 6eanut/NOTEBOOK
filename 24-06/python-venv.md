@@ -44,3 +44,5 @@ deactivate
 但是，如果像之前移植opengauss的项目，那最好还是用anaconda，因为它可以切换python版本。所以到底用不用anaconda，用不用venv，还是要看具体情况。
 
 接触项目越多，越发现版本的重要性，还是要先弄清楚版本，然后会更方便。
+
+[back](../README.md)
