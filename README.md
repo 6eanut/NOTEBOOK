@@ -4,4 +4,8 @@
 
 [01 Python-venv](24-06/python-venv.md)
 
-[02 What is nohup](24-06/what_is_nohup)
+[02 What is nohup](24-06/what_is_nohup.md)
+
+[03 How to set linux system time](24-06/linux_time.md)
+
+[04 How to save the output to a file](24-06/save_output_to_file.md)
