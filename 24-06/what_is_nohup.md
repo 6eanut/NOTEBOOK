@@ -33,5 +33,3 @@ top
 ```
 kill -9 process_id
 ```
-
-[back](../README.md)
