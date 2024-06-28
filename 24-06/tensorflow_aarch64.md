@@ -1,4 +1,4 @@
-# Tensorflow On Aarch64
+# Tensorflow on Aarch64
 
 Setting up a tensorflow environment includes installing tensorflow, tensorflow-text, and tensorflow-models.
 
@@ -6,7 +6,6 @@ Setting up a tensorflow environment includes installing tensorflow, tensorflow-t
 
 * **github:**https://github.com/tensorflow/tensorflow
 * **version:**2.15.0
-
 * **method:**pip install tensorflow==2.15.0
 
 Run `pip show tensorflow`, and if the version number appears, the tensorflow installation is complete.
@@ -15,7 +14,6 @@ Run `pip show tensorflow`, and if the version number appears, the tensorflow ins
 
 * **github:**https://github.com/tensorflow/text
 * **version:**2.15.0
-
 * **method:**build from source
 
 *step1 : bazel*
@@ -55,7 +53,6 @@ Run `pip show tensorflow-text`, and if the version number appears, the text inst
 
 * **github:**https://github.com/tensorflow/models
 * **version:**2.15.0
-
 * **method:**pip install tf-models-official==2.15.0
 
 Run `pip install tf-models-official`, and if the version number appears, the models installation is complete.
@@ -63,5 +60,7 @@ Run `pip install tf-models-official`, and if the version number appears, the mod
 ## Summary
 
 At the time of writing this article, I've already run some models with tensorflow. However, recently when running projects in models, there are still some problems. My personal guess is version incompatibility. So I set up the venv virtual environment, and found that tensorflow and models have wheel for aarch64, but text does not. Combining the existing tensorflow and models wheel version number, 2.15.0 was adopted. Because there is no text wheel, it is built from the source code.
+
 The actual build process certainly encountered more problems than the ones documented in this article, such as hdf5 build failures, etc. But since there are corresponding workarounds available online, they are not documented here.
+
 In short, the most important thing to debug a problem is to understand the error message and then solve it.
