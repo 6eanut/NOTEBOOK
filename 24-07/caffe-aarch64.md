@@ -1,4 +1,4 @@
-# caffe-aarch64
+# Caffe on Aarch64
 
 ## 1-环境搭建
 
@@ -120,3 +120,61 @@ caffe官网中提到的OpenCV适配版本是2.4~3.0，通过 `dnf install opencv
 ![1719980886558](image/caffe-aarch64/1719980886558.png)
 
 ## 3-用例运行
+
+caffe的interface一共有四个，如下图所示，这里采用time。caffe的GitHub官方维护了一个[Model Zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo)，其中包含许多model，每个model会提供deploy.prototxt或train_val.prototxt，两个文件都可以用来进行benchmark，但是后者需要将数据集下载到本地，前者所使用的数据是caffe随机初始化的输入数据。
+
+如果一个model自带deploy.prototxt，那么可以直接 `caffe time -model deploy.prototxt`来进行benchmark；如果没有deploy.prototxt，但是数据集的下载比较方便，那么可以先下载数据集到本地，然后再用 `caffe time -model train_val.prototxt`来进行benchmark；但如果数据集的下载比较麻烦或者数据集比较大，那么可以通过修改train_val.prototxt来获得deploy.prototxt然后再进行benchmark，做法可以[参考链接](https://blog.csdn.net/u010682375/article/details/77508790)。
+
+![1719989324321](image/caffe-aarch64/1719989324321.png)
+
+所以接下来通过三个模型来说明以上三种情境的具体处理方式。
+
+### **VGG_CNN_S**
+
+[VGG_CNN_S](https://gist.github.com/ksimonyan/fd8800eeb36e276cd6f9#file-readme-md)自带deploy.prototxt，所以可以通过 `caffe time -model deploy.prototxt`来直接进行测试，具体操作为：
+
+```
+caffe time -model VGG_CNN_S_deploy.prototxt
+```
+
+![1719996348274](image/caffe-aarch64/1719996348274.png)
+
+### The All Convolutional Net
+
+[The All Convolutional Net](https://github.com/mateuszbuda/ALL-CNN)没有deploy.prototxt，但是可以方便地下载数据集，所以可以先下载[数据集](https://drive.google.com/file/d/0B0a9KYriPdN4eUxScnQwZWxRQjA/view?resourcekey=0-nUKxLlzIdoyMW5qsLVrQ1Q)，然后再用train_val.prototxt来进行测试，具体操作为：
+
+```
+git clone https://github.com/mateuszbuda/ALL-CNN.git
+cd ALL-CNN
+//下载cifar-10_train_lmdb.zip并解压(model的github上有数据集的下载地址)
+caffe time -model ALL_CNN_C_train_val.prototxt
+```
+
+![1719998212676](image/caffe-aarch64/1719998212676.png)
+
+### Deep Hand: How to Train a CNN on 1 Million Hand Images When Your Data Is Continuous and Weakly Labelled
+
+[Deep Hand](https://github.com/BVLC/caffe/wiki/Model-Zoo#deep-hand-how-to-train-a-cnn-on-1-million-hand-images-when-your-data-is-continuous-and-weakly-labelled)没有deploy.prototxt，并且数据集的下载并不是十分方便，所以需要将train_val.prototxt修改为deploy.prototxt，然后再进行测试，具体的操作如下：
+
+***step1：***添加data层：shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
+
+```
+layer {
+  name: "data"
+  type: "Input"
+  top: "data"
+  input_param { shape: { dim: 5 dim: 3 dim: 224 dim: 224 } }
+}
+```
+
+***step2：***删除带有 `TEST`和 `TRAIN`的layer：可以全局先后搜索 `TEST`和 `TRAIN`，然后把对应的layer删除。
+
+***step3：***删除type为SoftmaxWithLoss的layer。
+
+至此，已经得到了可以用于测试的deploy.prototxt。
+
+```
+caffe time -model submit-net_deploy.prototxt
+```
+
+![1720000387834](image/caffe-aarch64/1720000387834.png)
