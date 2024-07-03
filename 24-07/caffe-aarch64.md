@@ -154,7 +154,7 @@ caffe time -model ALL_CNN_C_train_val.prototxt
 
 ### Deep Hand: How to Train a CNN on 1 Million Hand Images When Your Data Is Continuous and Weakly Labelled
 
-[Deep Hand](https://github.com/BVLC/caffe/wiki/Model-Zoo#deep-hand-how-to-train-a-cnn-on-1-million-hand-images-when-your-data-is-continuous-and-weakly-labelled)没有deploy.prototxt，并且数据集的下载并不是十分方便，所以需要将train_val.prototxt修改为deploy.prototxt，然后再进行测试，具体的操作如下：
+[Deep Hand](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands/)没有deploy.prototxt，并且数据集的下载并不是十分方便，所以需要将train_val.prototxt修改为deploy.prototxt，然后再进行测试，具体的操作如下：
 
 ***step1：***添加data层：shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
 
