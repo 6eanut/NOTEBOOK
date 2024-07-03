@@ -93,7 +93,7 @@ export PATH="$CAFFE/build/tools:$PATH"
 
 编译caffe需要用到protobuf，通过 `dnf install protobuf-devel`可以获得3.19版本。如果使用3.19版本的protobuf，在后续编译caffe时会出现下图报错。报错原因：[https://github.com/onnx/onnx/issues/2678](https://github.com/onnx/onnx/issues/2678)，故而需要安装3.6~3.10版本的protobuf。
 
-![1719975540919](https://file+.vscode-resource.vscode-cdn.net/d%3A/Desktop/NOTEBOOK/24-07/image/caffe-aarch64/1719975540919.png)
+![1719975540919](image/caffe-aarch64/1719975540919.png)
 
 ### BLAS的选择
 
