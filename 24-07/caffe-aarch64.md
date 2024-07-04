@@ -164,7 +164,7 @@ caffe time -model ALL_CNN_C_train_val.prototxt
 
 [Deep Hand](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands/)没有deploy.prototxt，并且数据集的下载并不是十分方便，所以需要将train_val.prototxt修改为deploy.prototxt，然后再进行测试，具体的操作如下：
 
-**step1-**添加input：把input放在 `name: "GoogleNet"`的下面。shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
+step1-添加input：把input放在 `name: "GoogleNet"`的下面。shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
 
 ```
 input: "data"
@@ -176,9 +176,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer：可以全局先后搜索 `TEST`和 `TRAIN`，然后把对应的layer删除。
+step2-删除带有 `TEST`和 `TRAIN`的layer：可以全局先后搜索 `TEST`和 `TRAIN`，然后把对应的layer删除。
 
-**step3-**删除type为SoftmaxWithLoss的layer。
+step3-删除type为SoftmaxWithLoss的layer。
 
 至此，已经得到了可以用于测试的deploy.prototxt。
 
@@ -226,7 +226,7 @@ caffe time -model my_models/NIN-Imagenet/deploy.protxt
 
 自带[train_val.prototxt](https://gist.github.com/mavenlin/e56253735ef32c3c296d)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置参考NIN-Imagenet。
+step1-添加input：dim的设置参考NIN-Imagenet。
 
 ```
 input: "data"
@@ -238,9 +238,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/NIN-CIFAR10/deploy.prototxt
@@ -382,7 +382,7 @@ caffe time -model my_models/googlenet_places205/deploy_places205.protxt
 
 自带[train_val.prototxt](https://3dvision.princeton.edu/pvt/GoogLeNet/ImageNet/)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，224，224。
+step1-添加input：dim的设置为5，3，224，224。
 
 ```
 input: "data"
@@ -394,9 +394,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/ImageNet/deploy.prototxt
@@ -408,7 +408,7 @@ caffe time -model my_models/ImageNet/deploy.prototxt
 
 自带[train_val.prototxt](https://3dvision.princeton.edu/pvt/GoogLeNet/Places/)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，224，224。
+step1-添加input：dim的设置为5，3，224，224。
 
 ```
 input: "data"
@@ -420,9 +420,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/Places/deploy.prototxt
@@ -434,7 +434,7 @@ caffe time -model my_models/Places/deploy.prototxt
 
 自带[train_val.prototxt](https://gist.github.com/jimgoo/0179e52305ca768a601f)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，227，227。
+step1-添加input：dim的设置为5，3，227，227。
 
 ```
 input: "data"
@@ -446,9 +446,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/oxford102/deploy.prototxt
@@ -550,7 +550,7 @@ caffe time -model my_models/hed_pretrained_bsds/deploy.prototxt
 
 自带[train_val.prototxt](https://gist.github.com/GilLevi/54aee1b8b0397721aa4b)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，224，224。
+step1-添加input：dim的设置为5，3，224，224。
 
 ```
 input: "data"
@@ -562,9 +562,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/Emotion_Classification_CNN/deploy.prototxt
@@ -606,7 +606,7 @@ caffe time -model my_models/SqueezeNet/SqueezeNet_v1.1/deploy.prototxt
 
 自带[train_val.prototxt](https://github.com/zongyuange/MixDCNN)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，226，226。
+step1-添加input：dim的设置为5，3，226，226。
 
 ```
 input: "data"
@@ -618,9 +618,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/MixDCNN/GoogleNet_cub_2011_4.prototxt
@@ -632,7 +632,7 @@ caffe time -model my_models/MixDCNN/GoogleNet_cub_2011_4.prototxt
 
 自带[train_val.prototxt](https://github.com/zongyuange/MixDCNN)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，226，226。
+step1-添加input：dim的设置为5，3，226，226。
 
 ```
 input: "data"
@@ -644,9 +644,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/MixDCNN/GoogleNet_birdsnap_6.prototxt
@@ -658,7 +658,7 @@ caffe time -model my_models/MixDCNN/GoogleNet_birdsnap_6.prototxt
 
 自带[train_val.prototxt](https://github.com/zongyuange/MixDCNN)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，226，226。
+step1-添加input：dim的设置为5，3，226，226。
 
 ```
 input: "data"
@@ -670,9 +670,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SOFTMAX_LOSS`的layer。
+step3-删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/MixDCNN/GoogleNet_clef_flower_4.prototxt
@@ -704,7 +704,7 @@ caffe time -model my_models/CNN_Object_Proposal/Googledeploy.prototxt
 
 自带[train_val.prototxt](https://www-i6.informatik.rwth-aachen.de/ftp/pub/rwth-phoenix/2016/1miohands-modelzoo-v2.tar.gz)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，224，224。
+step1-添加input：dim的设置为5，3，224，224。
 
 ```
 input: "data"
@@ -716,9 +716,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SoftmaxWithLoss`的layer。
+step3-删除type为 `SoftmaxWithLoss`的layer。
 
 ```
 caffe time -model my_models/1miohands-modelzoo-v2/deploy.prototxt
@@ -820,7 +820,7 @@ caffe time -model ALL_CNN_C_train_val.prototxt
 
 自带[train_val.prototxt](https://github.com/ethanhe42/channel-pruning/releases/tag/VGG-16_3C4x)，需要修改得到deploy.prototxt。
 
-**step1-**添加input：dim的设置为5，3，224，224。
+step1-添加input：dim的设置为5，3，224，224。
 
 ```
 input: "data"
@@ -832,9 +832,9 @@ input_shape {
 }
 ```
 
-**step2-**删除带有 `TEST`和 `TRAIN`的layer。
+step2-删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SoftmaxWithLoss`和 `Accuracy`的ler。
+step3-删除type为 `SoftmaxWithLoss`和 `Accuracy`的ler。
 
 ```
 caffe time -model /home/caffe/file/caffe/my_models/channel_pruning_VGG-16_3C4x/deploy.prototxt
