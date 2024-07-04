@@ -125,7 +125,7 @@ caffe的interface一共有四个，如下图所示，这里采用time。caffe的
 
 **注：在不同的model中，deploy.prototxt和train_val.prototxt两类文件的命名可能不同，后文中deploy.prototxt统一代指使用非实际数据集的文件，train_val.prototxt统一代指使用实际数据集的文件。**
 
-![1719989324321](https://file+.vscode-resource.vscode-cdn.net/d%3A/Desktop/NOTEBOOK/24-07/image/caffe-aarch64/1719989324321.png)
+![1719989324321](image/caffe-aarch64/1719989324321.png)
 
 ### 典型用例
 
@@ -164,7 +164,7 @@ caffe time -model ALL_CNN_C_train_val.prototxt
 
 [Deep Hand](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands/)没有deploy.prototxt，并且数据集的下载并不是十分方便，所以需要将train_val.prototxt修改为deploy.prototxt，然后再进行测试，具体的操作如下：
 
-**step1-**添加input：把input放在`name: "GoogleNet"`的下面。shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
+**step1-**添加input：把input放在 `name: "GoogleNet"`的下面。shape包含4个dim，第一个表示对待识别样本进行数据增广的数量，一般设置为5，可以自行定义；第二个表示处理的图像的通道数，RGB图像为3、灰度图为1；第三个和第四个是图像的长度和宽度，即crop_size的值，[参考链接](https://blog.csdn.net/u010417185/article/details/52619593)。
 
 ```
 input: "data"
@@ -240,7 +240,7 @@ input_shape {
 
 **step2-**删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为`SOFTMAX_LOSS`的layer。
+**step3-**删除type为 `SOFTMAX_LOSS`的layer。
 
 ```
 caffe time -model my_models/NIN-CIFAR10/deploy.prototxt
@@ -834,7 +834,7 @@ input_shape {
 
 **step2-**删除带有 `TEST`和 `TRAIN`的layer。
 
-**step3-**删除type为 `SoftmaxWithLoss`和`Accuracy`的layer。
+**step3-**删除type为 `SoftmaxWithLoss`和 `Accuracy`的ler。
 
 ```
 caffe time -model /home/caffe/file/caffe/my_models/channel_pruning_VGG-16_3C4x/deploy.prototxt
