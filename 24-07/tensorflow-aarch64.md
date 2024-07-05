@@ -25,16 +25,14 @@ deactivate
 
 * github：https://github.com/tensorflow/tensorflow
 * version：2.15.0
-
 * method：pip install tensorflow==2.15.0
 
-tensorflow是pypi中的一个包，可以直接通过`pip install tensorflow==2.15.0`来安装。
+tensorflow是pypi中的一个包，可以直接通过 `pip install tensorflow==2.15.0`来安装。
 
 ### tensorflow-text
 
 * github：https://github.com/tensorflow/text
 * version：2.15.0
-
 * method：build from source
 
 #### step1-bazel 6.1.0
@@ -54,7 +52,7 @@ mv bazel-6.1.0-linux-arm64 bazel
 export PATH="$PATH:PathToBazel"
 ```
 
-运行`bazel --version`命令查看是否安装并配置成功。
+运行 `bazel --version`命令查看是否安装并配置成功。
 
 ![1720170318183](image/tensorflow-aarch64/1720170318183.png)
 
@@ -78,17 +76,48 @@ pip install tensorflow_text-2.15.0-cp311-cp311-linux_aarch64.whl
 
 * github：https://github.com/tensorflow/models
 * version：2.15.0
-
 * method：pip install tf-models-official==2.15.0
 
 tensorflow-models是pypi中的一个包，可以直接通过 `pip install tf-models-official==2.15.0`来安装。
 
 ### 环境检查
 
-通过`pip show tensorflow tensorflow-text tf-models-official`命令检查环境是否搭建完毕。
+通过 `pip show tensorflow tensorflow-text tf-models-official`命令检查环境是否搭建完毕。
 
 ![1720167945517](image/tensorflow-aarch64/1720167945517.png)
 
 ## 2-问题解决
+
+### tf、tf-text、tf-models的版本选择
+
+为了三者适配，版本号必须统一。
+
+在pypi中，结合tf-models和tf支持的release版本号，最新的即为2.15.0；tf-text只有x86-64架构的wheel，所以只能从源码构建。
+
+### bazel的版本选择
+
+从源码构建tf-text需要bazel，且两者版本号需要适配。
+
+在text/oss_scripts/configure.sh文件中搜索bazelversion可以定位到获取bazel版本号的代码块，如下图，访问链接即可得到具体的版本号6.1.0。
+
+![1720174819503](image/tensorflow-aarch64/1720174819503.png)
+
+通过 `dnf install bazel`的方法只能得到5.3.0版本的bazel，在bazel的[github仓库](https://github.com/bazelbuild/bazel)里有6.1.0版本的[可执行文件](https://github.com/bazelbuild/bazel/releases/download/6.1.0/bazel-6.1.0-linux-arm64)，下载并配置环境变量即可。
+
+### h5py的构建问题
+
+在 `pip install tensorflow==2.15.0`时可能会遇到如下图所示error。
+
+![1720175300628](image/tensorflow-aarch64/1720175300628.png)
+
+查阅[h5py手册](https://docs.h5py.org/en/stable/build.html)，发现需要安装hdf5作为依赖。
+
+![1720175496173](image/tensorflow-aarch64/1720175496173.png)
+
+解决方法如下：
+
+```
+dnf python3-devel hdf5-devel.aarch64
+```
 
 ## 3-用例运行
