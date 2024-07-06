@@ -10,7 +10,7 @@
 
 编译安装caffe之前，需要通过dnf install来安装一些软件依赖包，如下：
 
-```bash
+```
 //编译caffe所需的prerequisites
 dnf install leveldb-devel snappy-devel opencv.aarch64 boost-devel hdf5-devel gflags-devel glog-devel lmdb-devel openblas.aarch64
 //环境搭建中需要的基础软件包
@@ -21,7 +21,7 @@ dnf install git wget tar gcc-g++ unzip automake libtool autoconf
 
 protobuf在GitHub上有[开源仓库](https://github.com/protocolbuffers/protobuf/tree/3.9.x)，这里选择从源码编译安装3.9.x版本的protobuf，[编译参考链接](https://github.com/protocolbuffers/protobuf/blob/3.9.x/src/README.md)，具体步骤如下：
 
-```bash
+```
 //从github上克隆仓库并切换到3.9.x分支，从而进行编译
 git clone https://github.com/protocolbuffers/protobuf.git
 cd protobuf
@@ -44,7 +44,7 @@ export LD_LIBRARY_PATH="PROTOBUF/lib:LD_LIBRARY_PATH"
 
 caffe在GitHub上有开源仓库，这里直接选择在master上进行编译即可，具体步骤如下：
 
-```bash
+```
 git clone https://github.com/BVLC/caffe.git
 cd caffe
 cp Makefile.config.example Makefile.config
@@ -60,7 +60,7 @@ cp Makefile.config.example Makefile.config
 
 为了将OpenCV4.x适配caffe，需要对caffe的源码做出如下修改：
 
-```bash
+```
 //工作路径为caffe仓库的根目录
 sed -i 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/layers/window_data_layer.cpp
 sed -i 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/util/io.cpp
@@ -71,7 +71,7 @@ sed -i 's/CV_LOAD_IMAGE_GRAYSCALE/cv::ImreadModes::IMREAD_GRAYSCALE/g' src/caffe
 
 至此，对于caffe的适配已经完成，接下来进行编译：
 
-```bash
+```
 //编译
 make all -j16
 make test -j16
@@ -141,7 +141,7 @@ caffe的interface一共有四个，如下图所示，这里采用time。caffe的
 
 [VGG_CNN_S](https://gist.github.com/ksimonyan/fd8800eeb36e276cd6f9#file-readme-md)自带deploy.prototxt，所以可以通过 `caffe time -model deploy.prototxt`来直接进行测试，具体操作为：
 
-```bash
+```
 caffe time -model VGG_CNN_S_deploy.prototxt
 ```
 
@@ -151,7 +151,7 @@ caffe time -model VGG_CNN_S_deploy.prototxt
 
 [The All Convolutional Net](https://github.com/mateuszbuda/ALL-CNN)没有deploy.prototxt，但是可以方便地下载数据集，所以可以先下载[数据集](https://drive.google.com/file/d/0B0a9KYriPdN4eUxScnQwZWxRQjA/view?resourcekey=0-nUKxLlzIdoyMW5qsLVrQ1Q)，然后再用train_val.prototxt来进行测试，具体操作为：
 
-```bash
+```
 git clone https://github.com/mateuszbuda/ALL-CNN.git
 cd ALL-CNN
 //下载cifar-10_train_lmdb.zip并解压(model的github上有数据集的下载地址)
@@ -182,7 +182,7 @@ step3-删除type为SoftmaxWithLoss的layer。
 
 至此，已经得到了可以用于测试的deploy.prototxt。
 
-```bash
+```
 caffe time -model submit-net_deploy.prototxt
 ```
 
@@ -196,7 +196,7 @@ caffe time -model submit-net_deploy.prototxt
 
 在caffe/models/finetune_flickr_style路径下，自带deploy.prototxt。
 
-```bash
+```
 caffe time -model models/finetune_flickr_style/deploy.prototxt
 ```
 
@@ -206,7 +206,7 @@ caffe time -model models/finetune_flickr_style/deploy.prototxt
 
 在caffe/models/bvlc_googlenet路径下，自带deploy.prototxt。
 
-```bash
+```
 caffe time -model models/bvlc_googlenet/deploy.prototxt
 ```
 
@@ -216,7 +216,7 @@ caffe time -model models/bvlc_googlenet/deploy.prototxt
 
 [deploy.prototxt](https://gist.github.com/tzutalin/0e3fd793a5b13dd7f647)
 
-```bash
+```
 caffe time -model my_models/NIN-Imagenet/deploy.protxt
 ```
 
@@ -242,7 +242,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/NIN-CIFAR10/deploy.prototxt
 ```
 
@@ -252,7 +252,7 @@ caffe time -model my_models/NIN-CIFAR10/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/fd8800eeb36e276cd6f9#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_S/VGG_CNN_S_deploy.prototxt
 ```
 
@@ -262,7 +262,7 @@ caffe time -model my_models/VGG_CNN_S/VGG_CNN_S_deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/f194575702fae63b2829#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_M/VGG_CNN_M_deploy.prototxt
 ```
 
@@ -272,7 +272,7 @@ caffe time -model my_models/VGG_CNN_M/VGG_CNN_M_deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/78047f3591446d1d7b91#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_M_2048/VGG_CNN_M_2048_deploy.prototxt
 ```
 
@@ -282,7 +282,7 @@ caffe time -model my_models/VGG_CNN_M_2048/VGG_CNN_M_2048_deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/f0f3d010e6d5f0100274#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_M_1024/VGG_CNN_M_1024_deploy.prototxt
 ```
 
@@ -292,7 +292,7 @@ caffe time -model my_models/VGG_CNN_M_1024/VGG_CNN_M_1024_deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/976847408258292576a1#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_M_128/deploy.prototxt
 ```
 
@@ -302,7 +302,7 @@ caffe time -model my_models/VGG_CNN_M_128/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/a32c9063ec8e1118221a#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_CNN_F/deploy.prototxt
 ```
 
@@ -312,7 +312,7 @@ caffe time -model my_models/VGG_CNN_F/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/211839e770f7b538e2d8#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_ILSVRC_16_layers_deploy.prototxt
 ```
 
@@ -322,7 +322,7 @@ caffe time -model my_models/VGG_ILSVRC_16_layers_deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ksimonyan/3785162f95cd2d5fee77#file-readme-md)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_ILSVRC_19_layers_deploy.prototxt
 ```
 
@@ -332,7 +332,7 @@ caffe time -model my_models/VGG_ILSVRC_19_layers_deploy.prototxt
 
 自带[deploy.prototxt](http://places.csail.mit.edu/model/placesCNN.tar.gz)文件。
 
-```bash
+```
 caffe time -model my_models/placesCNN/places205CNN_deploy.prototxt
 ```
 
@@ -342,7 +342,7 @@ caffe time -model my_models/placesCNN/places205CNN_deploy.prototxt
 
 自带[deploy.prototxt](http://places.csail.mit.edu/model/placesCNN.tar.gz)文件。
 
-```bash
+```
 caffe time -model my_models/placesCNN/places205CNN_deploy_FC7.prototxt
 ```
 
@@ -352,7 +352,7 @@ caffe time -model my_models/placesCNN/places205CNN_deploy_FC7.prototxt
 
 自带[deploy.prototxt](http://places.csail.mit.edu/model/hybridCNN.tar.gz)文件。
 
-```bash
+```
 caffe time -model my_models/hybridCNN/hybridCNN_deploy.prototxt
 ```
 
@@ -362,7 +362,7 @@ caffe time -model my_models/hybridCNN/hybridCNN_deploy.prototxt
 
 自带[deploy.prototxt](http://places.csail.mit.edu/model/hybridCNN.tar.gz)文件。
 
-```bash
+```
 caffe time -model my_models/hybridCNN/hybridCNN_deploy_FC7.prototxt
 ```
 
@@ -372,7 +372,7 @@ caffe time -model my_models/hybridCNN/hybridCNN_deploy_FC7.prototxt
 
 自带[deploy.prototxt](http://places.csail.mit.edu/model/googlenet_places205.tar.gz)文件。
 
-```bash
+```
 caffe time -model my_models/googlenet_places205/deploy_places205.protxt
 ```
 
@@ -398,7 +398,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/ImageNet/deploy.prototxt
 ```
 
@@ -424,7 +424,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/Places/deploy.prototxt
 ```
 
@@ -450,7 +450,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/oxford102/deploy.prototxt
 ```
 
@@ -460,7 +460,7 @@ caffe time -model my_models/oxford102/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/jimmie33/7ea9f8ac0da259866b854460f4526034)文件。
 
-```bash
+```
 caffe time -model my_models/GoogleNet_SOS/deploy.prototxt
 ```
 
@@ -470,7 +470,7 @@ caffe time -model my_models/GoogleNet_SOS/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/jimmie33/0585ed9428dc5222981f)文件。
 
-```bash
+```
 caffe time -model my_models/AlexNet_SalObjSub/deploy.prototxt
 ```
 
@@ -480,7 +480,7 @@ caffe time -model my_models/AlexNet_SalObjSub/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/jimmie33/27c1c0a7736ba66c2395)文件。
 
-```bash
+```
 caffe time -model my_models/VGG16_SalObjSub/deploy.prototxt
 ```
 
@@ -490,7 +490,7 @@ caffe time -model my_models/VGG16_SalObjSub/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/lwwang/Places_CNDS_model)文件。
 
-```bash
+```
 caffe time -model my_models/Places_CNDS_model/deploy.prototxt
 ```
 
@@ -500,7 +500,7 @@ caffe time -model my_models/Places_CNDS_model/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/GilLevi/c9e99062283c719c03de)文件。
 
-```bash
+```
 caffe time -model my_models/deploy_age.prototxt
 ```
 
@@ -510,7 +510,7 @@ caffe time -model my_models/deploy_age.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/GilLevi/c9e99062283c719c03de)文件。
 
-```bash
+```
 caffe time -model my_models/deploy_gender.prototxt
 ```
 
@@ -520,7 +520,7 @@ caffe time -model my_models/deploy_gender.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/bogger/b90eb88e31cd745525ae)文件。
 
-```bash
+```
 caffe time -model my_models/GoogLeNet_cars/deploy.prototxt
 ```
 
@@ -530,7 +530,7 @@ caffe time -model my_models/GoogLeNet_cars/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/weiliu89/2ed6e13bfd5b57cf81d6)文件。
 
-```bash
+```
 caffe time -model my_models/VGG_ILSVRC_16_layers_fc_reduced/deploy.prototxt
 ```
 
@@ -540,7 +540,7 @@ caffe time -model my_models/VGG_ILSVRC_16_layers_fc_reduced/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/s9xie/c6bd432f7347548b0187)文件。
 
-```bash
+```
 caffe time -model my_models/hed_pretrained_bsds/deploy.prototxt
 ```
 
@@ -566,7 +566,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/Emotion_Classification_CNN/deploy.prototxt
 ```
 
@@ -576,7 +576,7 @@ caffe time -model my_models/Emotion_Classification_CNN/deploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/ishay2b/58248e5f3c3bf575ac40?refer=bvlczoo)文件。
 
-```bash
+```
 caffe time -model my_models/vanillaCNN/deploy.prototxt
 ```
 
@@ -586,7 +586,7 @@ caffe time -model my_models/vanillaCNN/deploy.prototxt
 
 自带[deploy.prototxt](http://heatmapping.org/files/bvlc_model_zoo/pascal_voc_2012_multilabel/deploy_x30.prototxt)文件。
 
-```bash
+```
 caffe time -model my_models/Pascal_VOC/deploy.prototxt
 ```
 
@@ -596,7 +596,7 @@ caffe time -model my_models/Pascal_VOC/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/forresti/SqueezeNet/tree/master/SqueezeNet_v1.1)文件。
 
-```bash
+```
 caffe time -model my_models/SqueezeNet/SqueezeNet_v1.1/deploy.prototxt
 ```
 
@@ -622,7 +622,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/MixDCNN/GoogleNet_cub_2011_4.prototxt
 ```
 
@@ -648,7 +648,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/MixDCNN/GoogleNet_birdsnap_6.prototxt
 ```
 
@@ -674,7 +674,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SOFTMAX_LOSS`的layer。
 
-```bash
+```
 caffe time -model my_models/MixDCNN/GoogleNet_clef_flower_4.prototxt
 ```
 
@@ -684,7 +684,7 @@ caffe time -model my_models/MixDCNN/GoogleNet_clef_flower_4.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/jimmie33/509111f8a00a9ece2c3d5dde6a750129)文件。
 
-```bash
+```
 caffe time -model my_models/CNN_Object_Proposal/VGGdeploy.prototxt
 ```
 
@@ -694,7 +694,7 @@ caffe time -model my_models/CNN_Object_Proposal/VGGdeploy.prototxt
 
 自带[deploy.prototxt](https://gist.github.com/jimmie33/339fd0a938ed026692267a60b44c0c58)文件。
 
-```bash
+```
 caffe time -model my_models/CNN_Object_Proposal/Googledeploy.prototxt
 ```
 
@@ -720,7 +720,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SoftmaxWithLoss`的layer。
 
-```bash
+```
 caffe time -model my_models/1miohands-modelzoo-v2/deploy.prototxt
 ```
 
@@ -730,7 +730,7 @@ caffe time -model my_models/1miohands-modelzoo-v2/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/pertusa/InceptionBN-21K-for-Caffe)文件。
 
-```bash
+```
 caffe time -model my_models/InceptionBN-21K-for-Caffe/deploy.prototxt
 ```
 
@@ -740,7 +740,7 @@ caffe time -model my_models/InceptionBN-21K-for-Caffe/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/cvjena/cnn-models/tree/master/AlexNet_cvgj)文件。
 
-```bash
+```
 caffe time -model my_models/cnn-models-master/AlexNet_cvgj/deploy.prototxt
 ```
 
@@ -750,7 +750,7 @@ caffe time -model my_models/cnn-models-master/AlexNet_cvgj/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/cvjena/cnn-models/tree/master/VGG19_cvgj)文件。
 
-```bash
+```
 caffe time -model my_models/cnn-models-master/VGG19_cvgj/deploy.prototxt
 ```
 
@@ -760,7 +760,7 @@ caffe time -model my_models/cnn-models-master/VGG19_cvgj/deploy.prototxt
 
 自带[deploy.prototxt](https://github.com/cvjena/cnn-models/tree/master/ResNet_preact/ResNet10_cvgj)文件。
 
-```bash
+```
 caffe time -model my_models/cnn-models-master/ResNet_preact/ResNet10_cvgj/deploy.prototxt
 ```
 
@@ -770,7 +770,7 @@ caffe time -model my_models/cnn-models-master/ResNet_preact/ResNet10_cvgj/deploy
 
 自带[deploy.prototxt](https://github.com/cvjena/cnn-models/tree/master/ResNet_preact/ResNet50_cvgj)文件。
 
-```bash
+```
 caffe time -model my_models/cnn-models-master/ResNet_preact/ResNet50_cvgj/deploy.prototxt
 ```
 
@@ -780,7 +780,7 @@ caffe time -model my_models/cnn-models-master/ResNet_preact/ResNet50_cvgj/deploy
 
 自带[deploy.prototxt](https://drive.google.com/file/d/0BzkHndh8dgoATDZ5TnVRQk5qSkU/view?resourcekey=0-rTC40uO3k71zZPNzH-pYEg)文件。
 
-```bash
+```
 caffe time -model my_models/3DMM_CNN/deploy_network.prototxt
 ```
 
@@ -790,7 +790,7 @@ caffe time -model my_models/3DMM_CNN/deploy_network.prototxt
 
 自带[deploy.prototxt](https://github.com/IBBM/Cascaded-FCN/tree/master/models/cascadedfcn/step1)文件。
 
-```bash
+```
 caffe time -model my_models/Cascaded-FCN/models/cascadedfcn/step1/step1_deploy.prototxt
 ```
 
@@ -800,7 +800,7 @@ caffe time -model my_models/Cascaded-FCN/models/cascadedfcn/step1/step1_deploy.p
 
 自带[deploy.prototxt](https://github.com/IBBM/Cascaded-FCN/tree/master/models/cascadedfcn/step2)文件。
 
-```bash
+```
 caffe time -model my_models/Cascaded-FCN/models/cascadedfcn/step2/step2_deploy.prototxt
 ```
 
@@ -810,7 +810,7 @@ caffe time -model my_models/Cascaded-FCN/models/cascadedfcn/step2/step2_deploy.p
 
 自带[train_val.prototxt](https://github.com/mateuszbuda/ALL-CNN)和[数据集](https://drive.google.com/file/d/0B0a9KYriPdN4eUxScnQwZWxRQjA/view?resourcekey=0-nUKxLlzIdoyMW5qsLVrQ1Q)，下载好数据集后，用train_val.prototxt来测试。
 
-```bash
+```
 caffe time -model ALL_CNN_C_train_val.prototxt
 ```
 
@@ -836,7 +836,7 @@ step2-删除带有 `TEST`和 `TRAIN`的layer。
 
 step3-删除type为 `SoftmaxWithLoss`和 `Accuracy`的ler。
 
-```bash
+```
 caffe time -model /home/caffe/file/caffe/my_models/channel_pruning_VGG-16_3C4x/deploy.prototxt
 ```
 
@@ -846,7 +846,7 @@ caffe time -model /home/caffe/file/caffe/my_models/channel_pruning_VGG-16_3C4x/d
 
 自带[deploy.prototxt](https://github.com/RankingCNN/Using-Ranking-CNN-for-Age-Estimation)文件。
 
-```bash
+```
 caffe time -model my_models/Using-Ranking-CNN-for-Age-Estimation/basic_16to66/deploy_basic.prototxt
 ```
 
