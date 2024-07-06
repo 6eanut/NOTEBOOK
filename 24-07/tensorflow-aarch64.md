@@ -8,7 +8,7 @@
 
 python虚拟环境的基本使用方法如下：
 
-```
+```bash
 //创建
 python -m venv /home/tf-test/venv00
 //激活
@@ -39,7 +39,7 @@ tensorflow是pypi中的一个包，可以直接通过 `pip install tensorflow==2
 
 编译tensorflow-text 2.15.0需要bazel 6.1.0。
 
-```
+```bash
 //从github下载bazel 6.1.0的release
 wget https://github.com/bazelbuild/bazel/releases/download/6.1.0/bazel-6.1.0-linux-arm64
 //修改权限
@@ -60,7 +60,7 @@ export PATH="$PATH:PathToBazel"
 
 tensorflow-text的github仓库有从源码构建的[步骤](https://github.com/tensorflow/text?tab=readme-ov-file#build-from-source-steps)，具体如下：
 
-```
+```bash
 //从github下载text源码
 git clone https://github.com/tensorflow/text
 cd text
@@ -116,8 +116,77 @@ tensorflow-models是pypi中的一个包，可以直接通过 `pip install tf-mod
 
 解决方法如下：
 
-```
-dnf python3-devel hdf5-devel.aarch64
+```bash
+dnf install python3-devel hdf5-devel.aarch64
 ```
 
 ## 3-用例运行
+
+### examples
+
+> github：https://github.com/tensorflow/examples
+
+该仓库在tensorflow_examples/models/路径下有dcgan、densenet、nmt_with_attention和pix2pix共四个模型，下面分别进行测试。
+
+首先克隆仓库并设置环境变量 `PYTHONPATH`，如下：
+
+```bash
+//克隆仓库
+git clone https://github.com/tensorflow/examples
+//把examples仓库添加到PYTHONPATH环境变量中
+export PYTHONPATH="$PYTHONPATH:/home/tf-test/file/examples"
+```
+
+#### dcgan
+
+[dcgan](https://github.com/tensorflow/examples/tree/master/tensorflow_examples/models/dcgan)有train和eval的文件，这里进行train。
+
+```bash
+python dcgan.py
+```
+
+![1720237121039](image/tensorflow-aarch64/1720237121039.png)
+
+#### densenet
+
+[densenet](https://github.com/tensorflow/examples/tree/master/tensorflow_examples/models/densenet)有train和eval的文件，这里进行train。
+
+```bash
+python train.py
+```
+
+![1720237167534](image/tensorflow-aarch64/1720237167534.png)
+
+#### nmt_with_attention
+
+[nmt_with_attention](https://github.com/tensorflow/examples/tree/master/tensorflow_examples/models/nmt_with_attention)有train和eval的文件，这里进行train。
+
+```bash
+python train.py
+```
+
+![1720237227675](image/tensorflow-aarch64/1720237227675.png)
+
+#### pix2pix
+
+[pix2pix](https://github.com/tensorflow/examples/tree/master/tensorflow_examples/models/pix2pix)有train和eval的文件，这里进行train。
+
+下载数据集[facades](https://www.kaggle.com/datasets/vikramtiwari/pix2pix-dataset?resource=download-directory&select=facades)到tensorflow_examples/models/pix2pix/路径下，并解压facades.tar。
+
+```bash
+python pix2pix.py -path /home/tf-test/file/examples/tensorflow_examples/models/pix2pix/facades/
+```
+
+![1720237381080](image/tensorflow-aarch64/1720237381080.png)
+
+### benchmark
+
+> github:https://github.com/tensorflow/benchmarks
+
+
+### models
+
+> github:https://github.com/tensorflow/models
+
+
+### others
