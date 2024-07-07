@@ -179,13 +179,18 @@ python pix2pix.py -path /home/tf-test/file/examples/tensorflow_examples/models/p
 
 ![1720237381080](image/tensorflow-aarch64/1720237381080.png)
 
-### benchmark
-
-> github:https://github.com/tensorflow/benchmarks
-
 ### models
 
 > github:https://github.com/tensorflow/models
+
+本次主要测试了该仓库下recommendation、nlp、vision和projects中的模型，首先克隆仓库并设置环境变量：
+
+```
+//克隆仓库
+git clone https://github.com/tensorflow/models
+//把models仓库添加到PYTHONPATH环境变量中
+export PYTHONPATH="$PYTHONPATH:/home/tf-test/file/models"
+```
 
 #### recommendation
 
@@ -540,7 +545,7 @@ python train_test.py
 GitHub中的[说明](https://github.com/tensorflow/models/tree/master/official/projects/nhnet)，具体eval如下：
 
 ```
-python train_test.py
+python trainer_test.py
 ```
 
 ![1720259530099](image/tensorflow-aarch64/1720259530099.png)
@@ -574,6 +579,206 @@ python train_test.py
 ```
 
 ![1720259731922](image/tensorflow-aarch64/1720259731922.png)
+
+### benchmark
+
+> github:https://github.com/tensorflow/benchmarks
+
+benchmark模型需要克隆benchmark仓库，并且把上面克隆的models仓库切换到带有benchmark模块的v2.15.0tags，具体如下：
+
+```
+git clone https://github.com/tensorflow/benchmarks
+cd models
+git checkout v2.15.0
+```
+
+#### resnet56
+
+resnet56在models/official/benchmark/keras_cifar_benchmark.py文件中，这里采用合成数据进行测试，其自带benchmark_cpu，所以可以直接进行测试，如下：
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.keras_cifar_benchmark.Resnet56KerasBenchmarkSynth.benchmark_cpu
+```
+
+![1720319073853](image/tensorflow-aarch64/1720319073853.png)
+
+#### resnet50
+
+resnet50在models/official/benchmark/keras_imagenet_benchmark.py文件中，这里采用合成数据进行测试，其自带benchmark_1_gpu，当程序运行时会检测是否存在可用的gpu，若不存在则会使用cpu进行测试，所以可以直接进行测试，如下：
+
+注：可以通过修改keras_imagenet_benchmark.py文件中KerasClassifierBenchmarkBase类中的benchmark_1_gpu方法的per_replica_batch_size值来减小batch_size以缩短测试时间。
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.keras_imagenet_benchmark.Resnet50KerasBenchmarkSynth.benchmark_1_gpu
+```
+
+![1720319273691](image/tensorflow-aarch64/1720319273691.png)
+
+#### mobilenetv1
+
+mobilenetv1在models/official/benchmark/keras_imagenet_benchmark.py文件中，为了方便测试，这里选择使用合成数据，所以需要自己写相应的KerasPruningBenchmarkSynthBase和MobilenetV1KerasPruningBenchmarkSynth类，具体如下：
+
+```
+class KerasPruningBenchmarkSynthBase(Resnet50KerasBenchmarkBase):
+  """Pruning method benchmarks."""
+
+  def __init__(self, root_data_dir=None, default_flags=None, **kwargs):
+    if default_flags is None:
+      default_flags = {}
+    default_flags.update({
+        'skip_eval': True,
+        'report_accuracy_metrics': False,
+        'use_synthetic_data': True,
+        'train_steps': 110,
+        'log_steps': 10,
+        'pruning_method': 'polynomial_decay',
+        'pruning_begin_step': 0,
+        'pruning_end_step': 50000,
+        'pruning_initial_sparsity': 0,
+        'pruning_final_sparsity': 0.5,
+        'pruning_frequency': 100,
+    })
+    super(KerasPruningBenchmarkSynthBase, self).__init__(
+        default_flags=default_flags, **kwargs)
+
+class MobilenetV1KerasPruningBenchmarkSynth(KerasPruningBenchmarkSynthBase):
+  """Pruning method benchmarks for MobilenetV1."""
+
+  def __init__(self, **kwargs):
+    default_flags = {
+        'model': 'mobilenet',
+        'optimizer': 'mobilenet_default',
+    }
+    super(MobilenetV1KerasPruningBenchmarkSynth, self).__init__(
+        default_flags=default_flags, **kwargs)
+```
+
+同样可以调整batch_size来缩短测试时间。
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.keras_imagenet_benchmark.MobilenetV1KerasPruningBenchmarkSynth.benchmark_1_gpu
+```
+
+![1720319341816](image/tensorflow-aarch64/1720319341816.png)
+
+#### trivial
+
+trivial在models/official/benchmark/keras_imagenet_benchmark.py文件中，为了方便测试，这里选择使用合成数据，所以需要自己写相应的TrivialKerasBenchmarkSynth类，具体如下：
+
+```
+class TrivialKerasBenchmarkSynth(keras_benchmark.KerasBenchmark):
+  """Trivial model with synth data benchmark tests."""
+
+  def __init__(self, output_dir=None, root_data_dir=None, **kwargs):
+    flag_methods = [resnet_imagenet_main.define_imagenet_keras_flags]
+
+    def_flags = {}
+    def_flags['use_trivial_model'] = True
+    def_flags['skip_eval'] = True
+    def_flags['report_accuracy_metrics'] = False
+    def_flags['dtype'] = 'fp16'
+    def_flags['use_synthetic_data'] = True
+    def_flags['train_steps'] = 600
+    def_flags['log_steps'] = 100
+    def_flags['distribution_strategy'] = 'mirrored'
+
+    super(TrivialKerasBenchmarkSynth, self).__init__(
+        output_dir=output_dir,
+        flag_methods=flag_methods,
+        default_flags=def_flags)
+
+  @benchmark_wrappers.enable_runtime_flags
+  def _run_and_report_benchmark(self):
+    start_time_sec = time.time()
+    stats = resnet_imagenet_main.run(FLAGS)
+    wall_time_sec = time.time() - start_time_sec
+
+    super(TrivialKerasBenchmarkSynth, self)._report_benchmark(
+        stats,
+        wall_time_sec,
+        total_batch_size=FLAGS.batch_size,
+        log_steps=FLAGS.log_steps)
+
+  def benchmark_cpu(self):
+    self._setup()
+
+    FLAGS.num_gpus = 0
+    FLAGS.enable_eager = True
+    FLAGS.model_dir = self._get_model_dir('benchmark_cpu')
+    FLAGS.batch_size = 32
+    FLAGS.train_steps = 10
+    self._run_and_report_benchmark()
+
+  def fill_report_object(self, stats):
+    super(TrivialKerasBenchmarkSynth, self).fill_report_object(
+        stats,
+        total_batch_size=FLAGS.batch_size,
+        log_steps=FLAGS.log_steps)
+
+```
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.keras_imagenet_benchmark.TrivialKerasBenchmarkSynth.benchmark_cpu
+```
+
+![1720321568097](image/tensorflow-aarch64/1720321568097.png)
+
+#### efficientnet
+
+efficientnet在models/official/benchmark/keras_imagenet_benchmark.py文件中，为了方便测试，这里选择使用合成数据，所以需要自己写相应的EfficientNetKerasBenchmarkSynth类，具体如下：
+
+```
+class EfficientNetKerasBenchmarkSynth(KerasClassifierBenchmarkBase):
+  """EfficientNet synth data benchmark tests."""
+
+  def __init__(self, output_dir=None, root_data_dir=None, tpu=None, **kwargs):
+    def_flags = {}
+    def_flags['log_steps'] = 10
+
+    super(EfficientNetKerasBenchmarkSynth, self).__init__(
+        model='efficientnet', output_dir=output_dir, default_flags=def_flags,
+        tpu=tpu, dataset_builder='synthetic', train_epochs=1, train_steps=110)
+
+  def benchmark_cpu(self):
+    self._setup()
+    self._run_and_report_benchmark(
+        experiment_name='benchmark_cpu',
+        model_variant='efficientnet-b7',
+        dtype='bfloat16',
+        num_tpus=0,
+        distribution_strategy='one_device',
+        per_replica_batch_size=4)
+```
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.keras_imagenet_benchmark.EfficientNetKerasBenchmarkSynth.benchmark_cpu
+```
+
+![1720322114264](image/tensorflow-aarch64/1720322114264.png)
+
+#### resnet50ctl
+
+resnet50ctl在models/official/benchmark/resnet_ctl_imagenet_benchmark.py文件中，这里采用合成数据进行测试，其自带benchmark_1_gpu，当程序运行时会检测是否存在可用的gpu，若不存在则会使用cpu进行测试，所以可以直接进行测试，如下：
+
+另外需要将Resnet50CtlBenchmarkBase类中的benchmark_1_gpu方法的batch_size改为32，否则会出现RAM不够用的问题。
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
+```
+
+![1720322647257](image/tensorflow-aarch64/1720322647257.png)
+
+#### TfScanE2E
+
+测试和评估TensorFlow模型整体端到端性能的基准测试。
+
+TFScanE2E在models/official/benchamrk/tf_scan_benchmark.py文件中，有自带的benchmark_cpu，具体如下：
+
+```
+python3 benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --gcloud_key_file_url="" --benchmark_methods=official.benchmark.tf_scan_benchmark.TfScanE2EBenchmark.benchmark_cpu
+```
+
+![1720322771117](image/tensorflow-aarch64/1720322771117.png)
 
 ### others
 
