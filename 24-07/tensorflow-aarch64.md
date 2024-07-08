@@ -209,6 +209,60 @@ python ncf_keras_main.py --model_dir /home/tf-test/models/model_dir/ncf --data_d
 
 ![1720249874516](image/tensorflow-aarch64/1720249874516.png)
 
+##### DCN v2
+
+DCN v2在[GitHub](https://github.com/tensorflow/models/tree/master/official/recommendation/ranking)上有使用合成数据进行训练的步骤，具体如下：
+
+```
+python3 models/official/recommendation/ranking/train.py --mode=eval \
+--model_dir=/home/tf-test/models/model_dir/dcn_v2 --params_override="
+runtime:
+    distribution_strategy: 'one_device'
+task:
+    use_synthetic_data: true
+    model:
+        num_dense_features: 13
+        bottom_mlp: [512,256,2]
+        embedding_dim: 2
+        top_mlp: [1024,1024,512,256,1]
+        interaction: 'cross'
+        vocab_sizes: [39884406, 39043, 17289, 7420, 20263, 3, 7120, 1543, 63,
+            38532951, 2953546, 403346, 10, 2208, 11938, 155, 4, 976, 14,
+            39979771, 25641295, 39664984, 585935, 12972, 108, 36]
+trainer:
+    validation_steps: 2
+"
+```
+
+![1720405253457](image/tensorflow-aarch64/1720405253457.png)
+
+##### DLRM
+
+DLRM在[GitHub](https://github.com/tensorflow/models/tree/master/official/recommendation/ranking)上有使用合成数据进行训练的步骤，具体如下：
+
+```
+python3 models/official/recommendation/ranking/train.py --mode=eval \
+--model_dir=/home/tf-test/models/model_dir/dlrm --params_override="
+runtime:
+    distribution_strategy: 'one_device'
+task:
+    use_synthetic_data: true
+    model:
+        num_dense_features: 13
+        bottom_mlp: [512,256,2]
+        embedding_dim: 2
+        top_mlp: [1024,1024,512,256,1]
+        interaction: 'dot'
+        vocab_sizes: [39884406, 39043, 17289, 7420, 20263, 3, 7120, 1543, 63,
+            38532951, 2953546, 403346, 10, 2208, 11938, 155, 4, 976, 14,
+            39979771, 25641295, 39664984, 585935, 12972, 108, 36]
+trainer:
+    validation_steps: 2
+"
+```
+
+![1720405316275](image/tensorflow-aarch64/1720405316275.png)
+
 #### nlp
 
 nlp中的模型在路径models/official/nlp/下运行。

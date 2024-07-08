@@ -178,7 +178,7 @@ input_shape {
 
 step2-删除带有 `TEST`和 `TRAIN`的layer：可以全局先后搜索 `TEST`和 `TRAIN`，然后把对应的layer删除。
 
-step3-删除type为SoftmaxWithLoss的layer。
+step3-删除type为`SoftmaxWithLoss`的layer。
 
 至此，已经得到了可以用于测试的deploy.prototxt。
 
