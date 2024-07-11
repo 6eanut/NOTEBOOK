@@ -14,11 +14,15 @@
 
 ### deploy
 
-包含了50个用于`caffe time`的模型的`deploy.prototxt`文件。
+包含了50个用于 `caffe time`的模型的 `deploy.prototxt`文件。
 
 使用方法：
 
 ```
+mkdir caffe-deploy; cd caffe-deploy
+wget https://github.com/6eanut/NOTEBOOK/raw/main/24-07/caffe/deploy/deploy.zip
+unzip deploy.zip
+rm deploy.zip
 
 ```
 
