@@ -786,7 +786,7 @@ caffe time -model my_models/3DMM_CNN/deploy_network.prototxt
 
 ![1720064717585](image/caffe-aarch64/1720064717585.png)
 
-#### cascadedfcn/step1
+#### cascadedfcn_step1
 
 自带[deploy.prototxt](https://github.com/IBBM/Cascaded-FCN/tree/master/models/cascadedfcn/step1)文件。
 
@@ -796,7 +796,7 @@ caffe time -model my_models/Cascaded-FCN/models/cascadedfcn/step1/step1_deploy.p
 
 ![1720064596125](image/caffe-aarch64/1720064596125.png)
 
-#### cascadedfcn/step2
+#### cascadedfcn_step2
 
 自带[deploy.prototxt](https://github.com/IBBM/Cascaded-FCN/tree/master/models/cascadedfcn/step2)文件。
 
@@ -851,3 +851,9 @@ caffe time -model my_models/Using-Ranking-CNN-for-Age-Estimation/basic_16to66/de
 ```
 
 ![1720065166608](image/caffe-aarch64/1720065166608.png)
+
+## 4-附件
+
+50个models的deploy文件
+
+caffe在aarch64（鲲鹏920）上的自动化构建脚本
