@@ -3,7 +3,7 @@
 set -e # 在遇到非零返回值时立即退出
 
 echo "step1: 安装依赖包"
-sudo dnf install -y leveldb-devel snappy-devel opencv.riscv64 boost-devel hdf5-devel gflags-devel glog-devel lmdb-devel openblas.riscv64
+sudo dnf install -y leveldb-devel snappy-devel opencv.riscv64 boost-devel hdf5-devel gflags-devel glog-devel lmdb-devel openblas.riscv64 protobuf-devel.riscv64
 sudo dnf install -y git wget tar gcc-c++ unzip automake libtool autoconf
 
 echo "step2: 编译caffe"
