@@ -2,6 +2,19 @@
 
 set -e
 
+# 下载deploy文件到caffe-deploy文件夹
+mkdir caffe-deploy; cd caffe-deploy
+wget https://github.com/6eanut/NOTEBOOK/raw/main/24-07/caffe/deploy/deploy.zip
+unzip deploy.zip
+rm deploy.zip
+
+WORKSPACE=$(pwd)
+
+# 下载perf_information_get.sh
+wget https://raw.githubusercontent.com/6eanut/NOTEBOOK/main/24-07/caffe/shell/perf_information_get.sh
+chmod +x perf_information_get.sh
+mkdir perf
+
 # 文件列表
 output_files=("temp_output.txt" "output-checkout.txt" "output.txt")
 
@@ -11,9 +24,9 @@ for file in "${output_files[@]}"; do
     if [ -f "$file" ]; then
         # 清空文件
         > "$file"
-        echo "Cleared $file"
+        echo "清空 $file"
     else
-        echo "$file does not exist."
+        echo "$file 不存在."
     fi
 done
 
@@ -37,11 +50,11 @@ do
 
     # 检查是否找到了匹配的文件
     if [ -z "$file" ]; then
-        echo "File not found: ${pattern}*"
+        echo "找不到文件: ${pattern}*"
     else
         # 执行caffe time命令并将最后10行输出追加到输出文件
         echo ""$file"正在测试中"
-        /home/caffe-test/perf_information_get.sh "caffe time -model "$file"" "/home/caffe-test/perf"  &> temp_output.txt
+        ./perf_information_get "caffe time -model "$file"" "$WORKSPACE/perf"  &> temp_output.txt
         tail -n 13 temp_output.txt > output.txt
         echo "$file" > output-check.txt
         tail -n 13 temp_output.txt > output-checkout.txt 

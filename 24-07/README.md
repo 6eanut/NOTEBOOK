@@ -19,13 +19,21 @@
 使用方法：
 
 ```
-mkdir caffe-deploy; cd caffe-deploy
-wget https://github.com/6eanut/NOTEBOOK/raw/main/24-07/caffe/deploy/deploy.zip
-unzip deploy.zip
-rm deploy.zip
-
+wget https://raw.githubusercontent.com/6eanut/NOTEBOOK/main/24-07/caffe/shell/caffe-test.sh
+chmod +x caffe-test.sh
+./caffe-test.sh
 ```
 
 ### makefiles
 
+包含在`riscv64`和`aarch64`上编译caffe时所需要的`Makefile.config`。
+
 ### shell
+
+[性能测试脚本](caffe/shell/perf_information_get.sh)
+
+aarch64上caffe的[自动化构建脚本](caffe/shell/caffe-aarch64.sh)
+
+riscv64上caffe的[自动化构建脚本](caffe/shell/caffe-riscv64.sh)
+
+caffe的models[自动化测试脚本](caffe/shell/caffe-test.sh)
