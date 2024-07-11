@@ -36,6 +36,11 @@ files=($(ls))
 # 遍历从00到49的文件名
 for i in {0..49}
 do
+    # 47-*.prototxt模型需要下载数据集，要单独测试
+    if [ "$i" -eq 47 ]; then
+        continue
+    fi
+
     # 构建文件名模式
     pattern=$(printf "%02d-" $i)
 
