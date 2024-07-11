@@ -9,6 +9,8 @@ sudo dnf install -y git wget tar gcc-c++ unzip automake libtool autoconf
 echo "step2: 编译caffe"
 git clone https://github.com/BVLC/caffe.git
 cd caffe
+# 解决protobuf问题
+sed -i 's/coded_input->SetTotalBytesLimit(kProtoReadBytesLimit, 536870912);/coded_input->SetTotalBytesLimit(kProtoReadBytesLimit);/g' src/caffe/util/io.cpp
 wget https://raw.githubusercontent.com/6eanut/NOTEBOOK/main/24-07/caffe/makefiles/riscv64-Makefile.config
 mv riscv64-Makefile.config Makefile.config
 # 适配opencv4.x
