@@ -9,7 +9,8 @@ sudo dnf install -y git wget tar gcc-c++ unzip automake libtool autoconf
 echo "step2: 编译caffe"
 git clone https://github.com/BVLC/caffe.git
 cd caffe
-wget https://raw.githubusercontent.com/6eanut/caffe-makefile/main/Makefile.config
+wget https://raw.githubusercontent.com/6eanut/NOTEBOOK/main/24-07/caffe/makefiles/riscv64-Makefile.config
+mv riscv64-Makefile.config Makefile.config
 # 适配opencv4.x
 sed -i 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/layers/window_data_layer.cpp
 sed -i 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/util/io.cpp
