@@ -854,6 +854,6 @@ caffe time -model my_models/Using-Ranking-CNN-for-Age-Estimation/basic_16to66/de
 
 ## 4-附件
 
-50个models的deploy文件
+50个models的[deploy文件](https://github.com/6eanut/NOTEBOOK/tree/main/24-07/caffe/deploy)
 
-caffe在aarch64（鲲鹏920）上的自动化构建脚本
+caffe在aarch64（鲲鹏920）上的自动化构建[脚本](https://github.com/6eanut/NOTEBOOK/blob/main/24-07/caffe/shell/caffe-aarch64.sh)
