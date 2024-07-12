@@ -17,3 +17,5 @@
 [00 Caffe on Aarch64](24-07/caffe-aarch64.md)
 
 [01 Tensorflow on Aarch64 (Full edition)](24-07/tensorflow-aarch64.md)
+
+[02 Caffe on RISC-V](24-07/caffe-riscv64.md)
