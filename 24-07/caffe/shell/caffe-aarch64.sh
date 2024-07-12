@@ -2,6 +2,8 @@
 
 set -e # 在遇到非零返回值时立即退出
 
+start=$(date +%s)
+
 echo "step1: 安装依赖包"
 # 如果当前用户没有sudo权限，则注释掉下面两行，改用root用户来运行下面两行
 sudo dnf install -y leveldb-devel snappy-devel opencv.aarch64 boost-devel hdf5-devel gflags-devel glog-devel lmdb-devel openblas.aarch64
@@ -58,3 +60,7 @@ echo "export CAFFE=$CAFFE" >> ~/.bashrc
 echo "export PATH=$PATH" >> ~/.bashrc
 source ~/.bashrc
 caffe --version || { echo "Caffe build failed"; exit 1; }
+
+end=$(date +%s)
+runtime=$((end-start))
+echo "脚本执行时长： $runtime s"

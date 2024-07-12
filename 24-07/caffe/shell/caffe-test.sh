@@ -2,6 +2,8 @@
 
 set -e
 
+start=$(date +%s)
+
 # 下载deploy文件到caffe-deploy文件夹
 mkdir caffe-deploy; cd caffe-deploy
 wget https://github.com/6eanut/NOTEBOOK/raw/main/24-07/caffe/deploy/deploy.zip
@@ -67,3 +69,7 @@ do
         echo ""$file"测试完成"
     fi
 done
+
+end=$(date +%s)
+runtime=$((end-start))
+echo "脚本执行时长： $runtime s"
