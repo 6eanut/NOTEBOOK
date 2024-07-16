@@ -7,7 +7,7 @@ start=$(date +%s)
 # 安装 Python 和 TensorFlow 软件包依赖项
 sudo dnf install python3-devel python3-pip -y
 # 安装 bazel 软件包依赖项
-sudo dnf install build-essential python zip unzip java-11-openjdk-devel -y
+sudo dnf install python zip unzip java-11-openjdk-devel -y
 # 安装基本的工具
 sudo dnf install patchelf -y
 
@@ -46,18 +46,7 @@ sudo ln -s /usr/bin/aarch64-openEuler-linux-gcc /usr/bin/aarch64-linux-gnu-gcc
 bazel build //tensorflow/tools/pip_package:build_pip_package --local_ram_resources=1024 --jobs=12
 WORKSPACE=$(pwd)
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package $WORKSPACE/../tensorflow_pkg
-mv $WORKSPACE/../tensorflow_pkg/sorflow-2.15.0-cp310-cp310-linux_aarch64.whl $WORKSPACE/../tensorflow_pkg/tensorflow-2.15.0-cp311-cp311-manylinux_2_17_aarch64.whl
 pip install $WORKSPACE/../tensorflow_pkg/tensorflow*
-
-cd ..
-
-# 下载 text 源码
-git clone https://github.com/tensorflow/text
-cd text
-git checkout 2.15
-./oss_scripts/run_build.sh
-pip install tensorflow_text-2.15.0-cp311-cp311-linux_aarch64.whl
-
 
 end=$(date +%s)
 runtime=$((end-start))
