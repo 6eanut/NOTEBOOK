@@ -59,7 +59,7 @@ do
     if [ -z "$file" ]; then
         echo "找不到文件: ${pattern}*"
     else
-        # 执行caffe time命令并将最后10行输出追加到输出文件
+        # 执行caffe time命令并将最后13行输出追加到输出文件
         echo ""$file"正在测试中"
         ./perf_information_get.sh "caffe time -model "$file"" "$WORKSPACE/perf"  &> temp_output.txt
         tail -n 13 temp_output.txt >> output.txt

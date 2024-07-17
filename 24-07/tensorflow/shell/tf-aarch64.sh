@@ -9,10 +9,13 @@ sudo dnf install python3-devel python3-pip -y
 # 安装 bazel 软件包依赖项
 sudo dnf install build-essential python zip unzip java-11-openjdk-devel -y
 # 安装基本的工具
-sudo dnf install patchelf -y
+sudo dnf install patchelf openssl-devel -y
 
 # 创建虚拟环境
-python -m venv venv00
+cd /opt
+sudo ./python_3.11.6_build.sh
+cd ~
+/usr/local/python-3.11.6/bin/python3.11 -m venv venv00
 source venv00/bin/activate
 
 # 安装 TensorFlow pip 软件包依赖项
