@@ -1,4 +1,4 @@
-# 24-07
+# 24-Q3
 
 [02 Caffe on RISC-V](24-07/caffe-riscv64.md)
 
@@ -6,7 +6,7 @@
 
 [00 Caffe on Aarch64](24-07/caffe-aarch64.md)
 
-# 24-06
+# 24-Q2
 
 [05 Tensorflow on Aarch64 (Express edition)](24-06/tensorflow_aarch64.md)
 
