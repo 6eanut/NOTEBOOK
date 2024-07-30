@@ -1,4 +1,4 @@
-# 24-07目录说明
+# 24-Q3目录说明
 
 ## 0-笔记
 
@@ -26,7 +26,7 @@ chmod +x caffe-test.sh
 
 ### makefiles
 
-包含在`riscv64`和`aarch64`上编译caffe时所需要的`Makefile.config`。
+包含在 `riscv64`和 `aarch64`上编译caffe时所需要的 `Makefile.config`。
 
 ### shell
 

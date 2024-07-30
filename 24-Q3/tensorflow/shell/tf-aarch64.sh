@@ -26,7 +26,7 @@ cd tensorflow
 git checkout tags/v2.13.0
 ./configure
 export TF_PYTHON_VERSION=3.11
-bazel build //tensorflow/tools/pip_package:build_pip_package --local_ram_resources=1024 --jobs=4
+bazel build //tensorflow/tools/pip_package:build_pip_package --local_ram_resources=800 --jobs=4
 WORKSPACE=$(pwd)
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package $WORKSPACE/../tensorflow_pkg
 pip install $WORKSPACE/../tensorflow_pkg/tensorflow*
