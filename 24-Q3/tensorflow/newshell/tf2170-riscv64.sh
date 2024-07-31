@@ -10,6 +10,7 @@ unzip bazel-6.5.0-dist.zip
 rm bazel-6.5.0-dist.zip
 wget bazel-6.5.0-dist-riscv-v0.patch
 patch -p1 < bazel-6.5.0-dist-riscv-v0.patch
+tar -czhf remotejdk11_linux_riscv64.tar.gz -C /usr/lib/jvm java-11-openjdk
 EMBED_LABEL="6.5.0" EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk" ./compile.sh
 
 git clone https://gitee.com/xu-jia_kai/tensorflow.git
@@ -17,4 +18,4 @@ cd tensorflow
 git checkout tags/v2.17.0
 ./configure
 export TF_PYTHON_VERSION=3.11
-bazel build //tensorflow/tools/pip_package:wheel --repo_env=WHEEL_NAME=tensorflow_cpu --local_ram_resources=800 --jobs=4
+bazel build //tensorflow/tools/pip_package:wheel --repo_env=WHEEL_NAME=tensorflow --local_ram_resources=800 --jobs=4

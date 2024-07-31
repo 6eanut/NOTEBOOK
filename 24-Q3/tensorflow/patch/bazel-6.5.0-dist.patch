@@ -1,0 +1,260 @@
+diff -urN a/distdir_deps.bzl b/distdir_deps.bzl
+--- a/distdir_deps.bzl	1980-01-01 00:00:00.000000000 +0800
++++ b/distdir_deps.bzl	2024-07-30 14:50:24.410007638 +0800
+@@ -230,9 +230,9 @@
+     },
+     "com_google_absl": {
+         "archive": "20230802.0.tar.gz",
+-        "sha256": "59d2976af9d6ecf001a81a35749a6e551a335b949d34918cfade07737b9d93c5",
++        "sha256": "e2485693b7bb4e62215bab4cbaa4ac3bac581cbb21d3564a0bef5ea99775ec13",
+         "urls": [
+-            "https://github.com/abseil/abseil-cpp/archive/refs/tags/20230802.0.tar.gz",
++            "https://github.com/6eanut/abseil-cpp/releases/download/20230802.0/abseil-cpp-20230802.0.tar.gz",
+         ],
+         "used_in": [
+             "additional_distfiles",
+diff -urN a/src/BUILD b/src/BUILD
+--- a/src/BUILD	1980-01-01 00:00:00.000000000 +0800
++++ b/src/BUILD	2024-07-30 01:42:23.967030769 +0800
+@@ -385,7 +385,7 @@
+     ],
+ ) for suffix, jdk in [
+     ("-dev", "_jdk_allmodules"),
+-    ("", "_jdk_minimal"),
++    ("", "_nojdk"),
+     ("_jdk_allmodules", "_jdk_allmodules"),
+     ("_jdk_minimal", "_jdk_minimal"),
+     ("_dev_jdk", "_dev_jdk"),
+diff -urN a/src/main/cpp/blaze.cc b/src/main/cpp/blaze.cc
+--- a/src/main/cpp/blaze.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze.cc	2024-07-30 01:47:21.207108789 +0800
+@@ -1656,18 +1656,6 @@
+       new blaze_util::BazelLogHandler());
+   blaze_util::SetLogHandler(std::move(default_handler));
+ 
+-  const string self_path = GetSelfPath(argv[0]);
+-
+-  if (argc == 2 && strcmp(argv[1], "leaf") == 0) {
+-    PrintBazelLeaf();
+-    return blaze_exit_code::SUCCESS;
+-  }
+-
+-  if (argc == 2 && strcmp(argv[1], "--version") == 0) {
+-    PrintVersionInfo(self_path, option_processor->GetLowercaseProductName());
+-    return blaze_exit_code::SUCCESS;
+-  }
+-
+   string cwd = GetCanonicalCwd();
+   LoggingInfo logging_info(CheckAndGetBinaryPath(cwd, argv[0]), start_time);
+ 
+@@ -1698,6 +1686,18 @@
+   StartupOptions *startup_options = option_processor->GetParsedStartupOptions();
+   startup_options->MaybeLogStartupOptionWarnings();
+ 
++  const string self_path = GetSelfPath(argv[0], *startup_options);
++
++  if (argc == 2 && strcmp(argv[1], "leaf") == 0) {
++    PrintBazelLeaf();
++    return blaze_exit_code::SUCCESS;
++  }
++
++  if (argc == 2 && strcmp(argv[1], "--version") == 0) {
++      PrintVersionInfo(self_path, option_processor->GetLowercaseProductName());
++      return blaze_exit_code::SUCCESS;
++  }
++
+   SetDebugLog(startup_options->client_debug);
+   // If client_debug was false, this is ignored, so it's accurate.
+   BAZEL_LOG(INFO) << "Debug logging requested, sending all client log "
+diff -urN a/src/main/cpp/blaze_util_bsd.cc b/src/main/cpp/blaze_util_bsd.cc
+--- a/src/main/cpp/blaze_util_bsd.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_bsd.cc	2024-07-30 01:48:32.577127522 +0800
+@@ -46,6 +46,7 @@
+ 
+ #include "src/main/cpp/blaze_util.h"
+ #include "src/main/cpp/blaze_util_platform.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/util/errors.h"
+ #include "src/main/cpp/util/exit_code.h"
+ #include "src/main/cpp/util/file.h"
+@@ -89,7 +90,7 @@
+   }
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+ #if defined(__FreeBSD__)
+   char buffer[PATH_MAX] = {};
+   auto pid = getpid();
+diff -urN a/src/main/cpp/blaze_util_darwin.cc b/src/main/cpp/blaze_util_darwin.cc
+--- a/src/main/cpp/blaze_util_darwin.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_darwin.cc	2024-07-30 01:49:02.057135260 +0800
+@@ -124,7 +124,7 @@
+   }
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+   char pathbuf[PROC_PIDPATHINFO_MAXSIZE] = {};
+   int len = proc_pidpath(getpid(), pathbuf, sizeof(pathbuf));
+   if (len == 0) {
+diff -urN a/src/main/cpp/blaze_util_platform.h b/src/main/cpp/blaze_util_platform.h
+--- a/src/main/cpp/blaze_util_platform.h	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_platform.h	2024-07-30 01:51:39.507176588 +0800
+@@ -22,6 +22,7 @@
+ #include <vector>
+ 
+ #include "src/main/cpp/blaze_util.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/server_process_info.h"
+ #include "src/main/cpp/util/path.h"
+ #include "src/main/cpp/util/port.h"
+@@ -113,7 +114,7 @@
+ 
+ // Gets an absolute path to the binary being executed that is guaranteed to be
+ // readable.
+-std::string GetSelfPath(const char* argv0);
++std::string GetSelfPath(const char* argv0, const StartupOptions &options);
+ 
+ // Returns the directory Bazel can use to store output.
+ std::string GetOutputRoot();
+diff -urN a/src/main/cpp/blaze_util_windows.cc b/src/main/cpp/blaze_util_windows.cc
+--- a/src/main/cpp/blaze_util_windows.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_windows.cc	2024-07-30 01:52:13.127185412 +0800
+@@ -383,7 +383,7 @@
+   return blaze_util::ToString(GetCurrentProcessId());
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+   WCHAR buffer[kWindowsPathBufferSize] = {0};
+   if (!GetModuleFileNameW(0, buffer, kWindowsPathBufferSize)) {
+     BAZEL_DIE(blaze_exit_code::LOCAL_ENVIRONMENTAL_ERROR)
+diff -urN a/src/main/cpp/get_self_path_linux.cc b/src/main/cpp/get_self_path_linux.cc
+--- a/src/main/cpp/get_self_path_linux.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/get_self_path_linux.cc	2024-07-30 01:50:51.097163881 +0800
+@@ -14,8 +14,10 @@
+ 
+ #include <unistd.h>
+ #include <limits.h>
++#include <sys/auxv.h>
+ 
+ #include "src/main/cpp/blaze_util_platform.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/util/errors.h"
+ #include "src/main/cpp/util/exit_code.h"
+ #include "src/main/cpp/util/logging.h"
+@@ -25,7 +27,14 @@
+ using blaze_util::GetLastErrorString;
+ using std::string;
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
++  // Sometimes /proc/self/exec isn't valid (binfmt_misc + qemu)
++  // so we provide an alternate API. e.g. Linux aarch64 running
++  // bazel-x86_64-linux
++  if (options.linux_bazel_path_from_getauxval) {
++    return reinterpret_cast<const char *>(getauxval(AT_EXECFN));
++  }
++
+   char buffer[PATH_MAX] = {};
+   ssize_t bytes = readlink("/proc/self/exe", buffer, sizeof(buffer));
+   if (bytes == sizeof(buffer)) {
+diff -urN a/src/main/cpp/startup_options.cc b/src/main/cpp/startup_options.cc
+--- a/src/main/cpp/startup_options.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/startup_options.cc	2024-07-30 01:53:19.887202936 +0800
+@@ -97,7 +97,8 @@
+       macos_qos_class(QOS_CLASS_UNSPECIFIED),
+ #endif
+       unlimit_coredumps(false),
+-      windows_enable_symlinks(false) {
++      windows_enable_symlinks(false),
++      linux_bazel_path_from_getauxval(false)  {
+   if (blaze::IsRunningWithinTest()) {
+     output_root = blaze_util::MakeAbsolute(blaze::GetPathEnv("TEST_TMPDIR"));
+     max_idle_secs = 15;
+@@ -148,6 +149,8 @@
+   RegisterNullaryStartupFlag("write_command_log", &write_command_log);
+   RegisterNullaryStartupFlag("windows_enable_symlinks",
+                              &windows_enable_symlinks);
++  RegisterNullaryStartupFlag("linux_bazel_path_from_getauxval", 
++                             &linux_bazel_path_from_getauxval);
+   RegisterUnaryStartupFlag("command_port");
+   RegisterUnaryStartupFlag("connect_timeout_secs");
+   RegisterUnaryStartupFlag("local_startup_timeout_secs");
+diff -urN a/src/main/cpp/startup_options.h b/src/main/cpp/startup_options.h
+--- a/src/main/cpp/startup_options.h	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/startup_options.h	2024-07-30 01:53:50.687211020 +0800
+@@ -279,6 +279,10 @@
+   // developer mode to be enabled.
+   bool windows_enable_symlinks;
+ 
++  // Accomodate bazel running via Linux's binfmt_misc which
++  // defeats /proc/self/exe path-finding
++  bool linux_bazel_path_from_getauxval;
++
+  protected:
+   // Constructor for subclasses only so that site-specific extensions of this
+   // class can override the product name.  The product_name must be the
+diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE	2024-07-30 11:00:08.026158116 +0800
+@@ -37,6 +37,22 @@
+ # This must be kept in sync with the top-level WORKSPACE file.
+ maybe(
+     remote_java_repository,
++    name = "remotejdk11_linux_riscv64",
++    target_compatible_with = [
++        "@platforms//os:linux",
++        "@platforms//cpu:riscv64",
++    ],
++    strip_prefix = "java-11-openjdk",
++    urls = [
++        "file:///home/tf2170/bazel-dist/remotejdk11_linux_riscv64.tar.gz",
++    ],
++    version = "11",
++)
++
++
++# This must be kept in sync with the top-level WORKSPACE file.
++maybe(
++    remote_java_repository,
+     
+     name = "remotejdk11_linux_aarch64",
+     sha256 = "fc7c41a0005180d4ca471c90d01e049469e0614cf774566d4cf383caa29d1a97",
+diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl	2024-07-30 11:00:23.546162063 +0800
+@@ -43,6 +43,21 @@
+ # This must be kept in sync with the top-level WORKSPACE file.
+ maybe(
+     remote_java_repository,
++    {remotejdk11_linux_riscv64}
++    target_compatible_with = [
++        "@platforms//os:linux",
++        "@platforms//cpu:riscv64",
++    ],
++    strip_prefix = "java-11-openjdk",
++    urls = [
++        "file:///home/tf2170/bazel-dist/remotejdk11_linux_riscv64.tar.gz",
++    ],
++    version = "11",
++)
++
++# This must be kept in sync with the top-level WORKSPACE file.
++maybe(
++    remote_java_repository,
+     {remotejdk11_linux_ppc64le}
+     target_compatible_with = [
+         "@platforms//os:linux",
+diff -urN a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
+--- a/tools/jdk/BUILD.tools	1980-01-01 00:00:00.000000000 +0800
++++ b/tools/jdk/BUILD.tools	2024-07-30 01:40:54.917007395 +0800
+@@ -453,6 +453,7 @@
+     "remotejdk11_linux",
+     "remotejdk11_linux_ppc64le",
+     "remotejdk11_linux_s390x",
++    "remotejdk11_linux_riscv64",
+ ] + [
+     "remotejdk%s_%s" % (version, os)
+     for os in ("linux", "linux_aarch64", "macos", "macos_aarch64", "win", "win_arm64")
