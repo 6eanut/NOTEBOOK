@@ -1,0 +1,1 @@
+pip install keras==2.13.1 numpy==1.24.3 packaging==24.1 protobuf==4.25.4 requests==2.32.3 six==1.16.0 wheel==0.44.0

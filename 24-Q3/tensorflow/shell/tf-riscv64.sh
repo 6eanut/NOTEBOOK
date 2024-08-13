@@ -34,3 +34,5 @@ pip install $WORKSPACE/../tensorflow_pkg/tensorflow*
 end=$(date +%s)
 runtime=$((end-start))
 echo "脚本执行时长： $runtime s"
+
+

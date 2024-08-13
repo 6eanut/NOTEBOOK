@@ -1,0 +1,353 @@
+diff -urN a/distdir_deps.bzl b/distdir_deps.bzl
+--- a/distdir_deps.bzl	1980-01-01 00:00:00.000000000 +0800
++++ b/distdir_deps.bzl	2024-08-13 13:36:49.000000000 +0800
+@@ -230,6 +230,10 @@
+     },
+     "com_google_absl": {
+         "archive": "20211102.0.tar.gz",
++        "patch_args": ["-p1"],
++        "patches": [
++            "//third_party:abseil-cpp/abseil-cpp-riscv.patch",
++        ],
+         "sha256": "dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4",
+         "urls": [
+             "https://mirror.bazel.build/github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz",
+@@ -455,6 +459,15 @@
+         ],
+         "used_in": ["test_WORKSPACE_files"],
+     },
++    "remotejdk11_linux_riscv64": {
++        "archive": "remotejdk11_linux_riscv64.tar.gz",
++        "sha256": "6935a1e5af55363e37c5dc5a61bc220f347bbb36839e0e9f96dc1b75d079773c",
++        "strip_prefix": "java-11-openjdk",
++        "urls": [
++            "https://github.com/6eanut/bazel/releases/download/jdk/remotejdk11_linux_riscv64.tar.gz",
++        ],
++        "used_in": [],
++    },
+     "remotejdk11_linux_ppc64le": {
+         "aliases": [
+             "remotejdk11_linux_ppc64le_for_testing",
+@@ -796,3 +809,4 @@
+           "drop them into a template.",
+     implementation = _gen_workspace_stanza_impl,
+ )
++
+diff -urN a/src/BUILD b/src/BUILD
+--- a/src/BUILD	1980-01-01 00:00:00.000000000 +0800
++++ b/src/BUILD	2024-08-01 18:39:01.000000000 +0800
+@@ -385,7 +385,7 @@
+     ],
+ ) for suffix, jdk in [
+     ("-dev", "_jdk_allmodules"),
+-    ("", "_jdk_minimal"),
++    ("", "_nojdk"),
+     ("_jdk_allmodules", "_jdk_allmodules"),
+     ("_jdk_minimal", "_jdk_minimal"),
+     ("_dev_jdk", "_dev_jdk"),
+@@ -691,3 +691,4 @@
+         for version in ("17", "18")
+     ],
+ )
++
+diff -urN a/src/main/cpp/blaze.cc b/src/main/cpp/blaze.cc
+--- a/src/main/cpp/blaze.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -1647,18 +1647,6 @@
+       new blaze_util::BazelLogHandler());
+   blaze_util::SetLogHandler(std::move(default_handler));
+ 
+-  const string self_path = GetSelfPath(argv[0]);
+-
+-  if (argc == 2 && strcmp(argv[1], "leaf") == 0) {
+-    PrintBazelLeaf();
+-    return blaze_exit_code::SUCCESS;
+-  }
+-
+-  if (argc == 2 && strcmp(argv[1], "--version") == 0) {
+-    PrintVersionInfo(self_path, option_processor->GetLowercaseProductName());
+-    return blaze_exit_code::SUCCESS;
+-  }
+-
+   string cwd = GetCanonicalCwd();
+   LoggingInfo logging_info(CheckAndGetBinaryPath(cwd, argv[0]), start_time);
+ 
+@@ -1689,6 +1677,18 @@
+   StartupOptions *startup_options = option_processor->GetParsedStartupOptions();
+   startup_options->MaybeLogStartupOptionWarnings();
+ 
++  const string self_path = GetSelfPath(argv[0],*startup_options);
++
++  if (argc == 2 && strcmp(argv[1], "leaf") == 0) {
++    PrintBazelLeaf();
++    return blaze_exit_code::SUCCESS;
++  }
++
++  if (argc == 2 && strcmp(argv[1], "--version") == 0) {
++    PrintVersionInfo(self_path, option_processor->GetLowercaseProductName());
++    return blaze_exit_code::SUCCESS;
++  }
++
+   SetDebugLog(startup_options->client_debug);
+   // If client_debug was false, this is ignored, so it's accurate.
+   BAZEL_LOG(INFO) << "Debug logging requested, sending all client log "
+@@ -2185,3 +2185,4 @@
+ }
+ 
+ }  // namespace blaze
++
+diff -urN a/src/main/cpp/blaze_util_bsd.cc b/src/main/cpp/blaze_util_bsd.cc
+--- a/src/main/cpp/blaze_util_bsd.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_bsd.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -46,6 +46,7 @@
+ 
+ #include "src/main/cpp/blaze_util.h"
+ #include "src/main/cpp/blaze_util_platform.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/util/errors.h"
+ #include "src/main/cpp/util/exit_code.h"
+ #include "src/main/cpp/util/file.h"
+@@ -89,7 +90,7 @@
+   }
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+ #if defined(__FreeBSD__)
+   char buffer[PATH_MAX] = {};
+   auto pid = getpid();
+@@ -236,3 +237,4 @@
+ }
+ 
+ }  // namespace blaze
++
+diff -urN a/src/main/cpp/blaze_util_darwin.cc b/src/main/cpp/blaze_util_darwin.cc
+--- a/src/main/cpp/blaze_util_darwin.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_darwin.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -124,7 +124,7 @@
+   }
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+   char pathbuf[PROC_PIDPATHINFO_MAXSIZE] = {};
+   int len = proc_pidpath(getpid(), pathbuf, sizeof(pathbuf));
+   if (len == 0) {
+@@ -274,3 +274,4 @@
+ }
+ 
+ }   // namespace blaze.
++
+diff -urN a/src/main/cpp/blaze_util_platform.h b/src/main/cpp/blaze_util_platform.h
+--- a/src/main/cpp/blaze_util_platform.h	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_platform.h	2024-08-01 18:39:01.000000000 +0800
+@@ -22,6 +22,7 @@
+ #include <vector>
+ 
+ #include "src/main/cpp/blaze_util.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/server_process_info.h"
+ #include "src/main/cpp/util/path.h"
+ #include "src/main/cpp/util/port.h"
+@@ -113,7 +114,7 @@
+ 
+ // Gets an absolute path to the binary being executed that is guaranteed to be
+ // readable.
+-std::string GetSelfPath(const char* argv0);
++std::string GetSelfPath(const char* argv0, const StartupOptions &options);
+ 
+ // Returns the directory Bazel can use to store output.
+ std::string GetOutputRoot();
+@@ -309,3 +310,4 @@
+ }  // namespace blaze
+ 
+ #endif  // BAZEL_SRC_MAIN_CPP_BLAZE_UTIL_PLATFORM_H_
++
+diff -urN a/src/main/cpp/blaze_util_windows.cc b/src/main/cpp/blaze_util_windows.cc
+--- a/src/main/cpp/blaze_util_windows.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/blaze_util_windows.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -383,7 +383,7 @@
+   return blaze_util::ToString(GetCurrentProcessId());
+ }
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
+   WCHAR buffer[kWindowsPathBufferSize] = {0};
+   if (!GetModuleFileNameW(0, buffer, kWindowsPathBufferSize)) {
+     BAZEL_DIE(blaze_exit_code::LOCAL_ENVIRONMENTAL_ERROR)
+@@ -1454,3 +1454,4 @@
+ }
+ 
+ }  // namespace blaze
++
+diff -urN a/src/main/cpp/get_self_path_linux.cc b/src/main/cpp/get_self_path_linux.cc
+--- a/src/main/cpp/get_self_path_linux.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/get_self_path_linux.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -14,8 +14,10 @@
+ 
+ #include <unistd.h>
+ #include <limits.h>
++#include <sys/auxv.h>
+ 
+ #include "src/main/cpp/blaze_util_platform.h"
++#include "src/main/cpp/startup_options.h"
+ #include "src/main/cpp/util/errors.h"
+ #include "src/main/cpp/util/exit_code.h"
+ #include "src/main/cpp/util/logging.h"
+@@ -25,7 +27,13 @@
+ using blaze_util::GetLastErrorString;
+ using std::string;
+ 
+-string GetSelfPath(const char* argv0) {
++string GetSelfPath(const char* argv0, const StartupOptions &options) {
++  // Sometimes /proc/self/exec isn't valid (binfmt_misc + qemu)
++  // so we provide an alternate API. e.g. Linux aarch64 running
++  // bazel-x86_64-linux
++  if (options.linux_bazel_path_from_getauxval) {
++    return reinterpret_cast<const char *>(getauxval(AT_EXECFN));
++  }
+   char buffer[PATH_MAX] = {};
+   ssize_t bytes = readlink("/proc/self/exe", buffer, sizeof(buffer));
+   if (bytes == sizeof(buffer)) {
+@@ -42,3 +50,4 @@
+ }
+ 
+ }  // namespace blaze
++
+diff -urN a/src/main/cpp/startup_options.cc b/src/main/cpp/startup_options.cc
+--- a/src/main/cpp/startup_options.cc	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/startup_options.cc	2024-08-01 18:39:01.000000000 +0800
+@@ -97,7 +97,8 @@
+       macos_qos_class(QOS_CLASS_UNSPECIFIED),
+ #endif
+       unlimit_coredumps(false),
+-      windows_enable_symlinks(false) {
++      windows_enable_symlinks(false),
++      linux_bazel_path_from_getauxval(false)  {
+   if (blaze::IsRunningWithinTest()) {
+     output_root = blaze_util::MakeAbsolute(blaze::GetPathEnv("TEST_TMPDIR"));
+     max_idle_secs = 15;
+@@ -148,6 +149,8 @@
+   RegisterNullaryStartupFlag("write_command_log", &write_command_log);
+   RegisterNullaryStartupFlag("windows_enable_symlinks",
+                              &windows_enable_symlinks);
++  RegisterNullaryStartupFlag("linux_bazel_path_from_getauxval", 
++                             &linux_bazel_path_from_getauxval);
+   RegisterUnaryStartupFlag("command_port");
+   RegisterUnaryStartupFlag("connect_timeout_secs");
+   RegisterUnaryStartupFlag("local_startup_timeout_secs");
+@@ -642,3 +645,4 @@
+ }
+ 
+ }  // namespace blaze
++
+diff -urN a/src/main/cpp/startup_options.h b/src/main/cpp/startup_options.h
+--- a/src/main/cpp/startup_options.h	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/cpp/startup_options.h	2024-08-01 18:39:01.000000000 +0800
+@@ -278,7 +278,9 @@
+   // Whether to create symbolic links on Windows for files. Requires
+   // developer mode to be enabled.
+   bool windows_enable_symlinks;
+-
++  // Accomodate bazel running via Linux's binfmt_misc which
++  // defeats /proc/self/exe path-finding
++  bool linux_bazel_path_from_getauxval;
+  protected:
+   // Constructor for subclasses only so that site-specific extensions of this
+   // class can override the product name.  The product_name must be the
+@@ -419,3 +421,4 @@
+ }  // namespace blaze
+ 
+ #endif  // BAZEL_SRC_MAIN_CPP_STARTUP_OPTIONS_H_
++
+diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BUILD b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BUILD
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BUILD	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BUILD	2024-08-13 11:33:00.000000000 +0800
+@@ -96,6 +96,7 @@
+         "rules_proto",
+         "remotejdk11_linux",
+         "remotejdk11_linux_aarch64",
++        "remotejdk11_linux_riscv64",
+         "remotejdk11_linux_ppc64le",
+         "remotejdk11_linux_s390x",
+         "remotejdk11_macos",
+diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE	2024-08-13 11:34:59.000000000 +0800
+@@ -52,6 +52,21 @@
+ # This must be kept in sync with the top-level WORKSPACE file.
+ maybe(
+     remote_java_repository,
++
++    name = "remotejdk11_linux_riscv64",
++    strip_prefix = "java-11-openjdk",
++    urls = ["https://github.com/6eanut/bazel/releases/download/jdk/remotejdk11_linux_riscv64.tar.gz"],
++
++    target_compatible_with = [
++        "@platforms//os:linux",
++        "@platforms//cpu:riscv64",
++    ],
++    version = "11",
++)
++
++# This must be kept in sync with the top-level WORKSPACE file.
++maybe(
++    remote_java_repository,
+     
+     name = "remotejdk11_linux_ppc64le",
+     sha256 = "a8fba686f6eb8ae1d1a9566821dbd5a85a1108b96ad857fdbac5c1e4649fc56f",
+@@ -68,7 +83,6 @@
+ # This must be kept in sync with the top-level WORKSPACE file.
+ maybe(
+     remote_java_repository,
+-    
+     name = "remotejdk11_linux_s390x",
+     sha256 = "a58fc0361966af0a5d5a31a2d8a208e3c9bb0f54f345596fd80b99ea9a39788b",
+     strip_prefix = "jdk-11.0.15+10",
+@@ -409,3 +423,4 @@
+ )
+ 
+ register_toolchains("@bazel_tools//tools/jdk:all")
++
+diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl	1980-01-01 00:00:00.000000000 +0800
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl	2024-08-13 11:35:43.000000000 +0800
+@@ -42,6 +42,17 @@
+ # This must be kept in sync with the top-level WORKSPACE file.
+ maybe(
+     remote_java_repository,
++    {remotejdk11_linux_riscv64}
++    target_compatible_with = [
++        "@platforms//os:linux",
++        "@platforms//cpu:riscv64",
++    ],
++    version = "11",
++)
++
++# This must be kept in sync with the top-level WORKSPACE file.
++maybe(
++    remote_java_repository,
+     {remotejdk11_linux_ppc64le}
+     target_compatible_with = [
+         "@platforms//os:linux",
+@@ -274,3 +285,4 @@
+ )
+ 
+ register_toolchains("@bazel_tools//tools/jdk:all")
++
+diff -urN a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
+--- a/tools/jdk/BUILD.tools	1980-01-01 00:00:00.000000000 +0800
++++ b/tools/jdk/BUILD.tools	2024-08-13 11:36:22.000000000 +0800
+@@ -416,6 +416,7 @@
+     "remotejdk11_win",
+     "remotejdk11_win_arm64",
+     "remotejdk11_linux_aarch64",
++    "remotejdk11_linux_riscv64",
+     "remotejdk11_linux",
+     "remotejdk11_linux_ppc64le",
+     "remotejdk11_linux_s390x",
+@@ -470,3 +471,4 @@
+     runtime_version = "8",
+     visibility = ["//visibility:public"],
+ )
++
