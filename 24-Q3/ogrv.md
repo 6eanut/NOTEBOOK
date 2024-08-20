@@ -10,7 +10,7 @@
 
 ```
 dnf update -y
-dnf install wget tar gzip gcc gcc-g++ lbzip2 -y
+dnf install wget tar gzip gcc gcc-g++ lbzip2 bison flex texinfo expect diffutils -y
 ```
 
 ### gcc10.3
@@ -24,7 +24,7 @@ cd gcc-10.3.0/
 ./contrib/download_prerequisites
 # 参考https://github.com/gcc-mirror/gcc/commit/2701442d0cf6292f6624443c15813d6d1a3562fe做修改
 mkdir build; cd build
-../configure --prefix=/user/local/gcc-10.3.0 --build=riscv64-unknown-linux-gnu --target=riscv64-unknown-linux-gnu --enable-languages=c,c++ --disable-multilib
+../configure --prefix=/user/local/gcc-10.3.0 --enable-shared --build=riscv64-unknown-linux-gnu --target=riscv64-unknown-linux-gnu --enable-languages=c,c++ --disable-multilib
 make; make install
 ```
 

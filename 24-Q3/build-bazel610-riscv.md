@@ -34,3 +34,35 @@ dnf install /var/tmp/build-root/mainline_riscv64-riscv64/home/abuild/rpmbuild/RP
 下载bazel的examples[仓库](https://github.com/bazelbuild/examples)，然后分别测试cpp和java。
 
 ![1723538344316](image/build-bazel610-riscv/1723538344316.png)![1723538351218](image/build-bazel610-riscv/1723538351218.png)
+
+## obs环境搭建
+
+### 注册obs账号
+
+https://build.tarsier-infra.isrc.ac.cn/
+
+### 本地obs环境构建
+
+#### osc
+
+```
+dnf install osc
+```
+
+#### obs
+
+https://download.opensuse.org/repositories/openSUSE:/Tools/Fedora_Rawhide/noarch/
+
+```
+# 在上方链接中下载obs-build-mkbaselibs和obs-build的rpm包
+dnf install obs-build-mkbaselibs obs-build
+vi ~/.oscrc
+# 写入以下内容：
+[general]
+apiurl = https://build.tarsier-infra.isrc.ac.cn/
+no_verify = 1
+
+[https://build.tarsier-infra.isrc.ac.cn/]
+user=username
+pass=passwd
+```
