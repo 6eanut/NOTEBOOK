@@ -1,0 +1,14 @@
+diff -urN a/distdir_deps.bzl b/distdir_deps.bzl
+--- a/distdir_deps.bzl  2024-08-28 13:51:56.154598728 +0800
++++ b/distdir_deps.bzl  2024-08-28 17:45:13.611542936 +0800
+@@ -230,6 +230,10 @@
+     },
+     "com_google_absl": {
+         "archive": "20230802.0.tar.gz",
++        "patch_args": ["-p1"],
++        "patches": [
++            "//third_party:abseil-cpp/abseil-cpp-riscv-01.patch",
++        ],
+         "sha256": "59d2976af9d6ecf001a81a35749a6e551a335b949d34918cfade07737b9d93c5",
+         "urls": [
+             "https://github.com/abseil/abseil-cpp/archive/refs/tags/20230802.0.tar.gz",
