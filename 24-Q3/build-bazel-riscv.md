@@ -33,7 +33,7 @@ dnf install /var/tmp/build-root/mainline_riscv64-riscv64/home/abuild/rpmbuild/RP
 
 在RISC-V上构建6.5.0的Bazel时，其Bazel的源码修改与6.1.0相类似，但是Bazel调用的外部库abseil-cpp在6.1.0中采用的是20211102.0版而6.5.0采用的是20230802.0版，所以需要制作20230802.0版的补丁以解决rdcycle问题。
 
-按照构建bazel5.3.0的方式，拉取obs仓库，然后将bazel.spec文件改为这样，然后从Github官网拉取bazel-6.5.0-dist[文件](https://github.com/bazelbuild/bazel/releases/download/6.5.0/bazel-6.5.0-dist.zip)，然后打上[补丁](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/bazel650.patch)，还需要下载abseil-cpp的补丁[文件](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/abseil-cpp-riscv-01.patch)，还有更新过后的补丁文件，然后 `osc build`即可。
+按照构建bazel5.3.0的方式，拉取obs仓库，然后将bazel.spec文件改为这样，然后从Github官网拉取bazel-6.5.0-dist[文件](https://github.com/bazelbuild/bazel/releases/download/6.5.0/bazel-6.5.0-dist.zip)，然后打上[补丁](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/bazel650.patch)，还需要下载abseil-cpp的补丁[文件](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/abseil-cpp-riscv-01.patch)，还有更新过后的04-riscv-distdir_deps-01补丁[文件](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/04-riscv-distdir_deps-01.patch)，然后 `osc build`即可。
 
 ## 验证
 
