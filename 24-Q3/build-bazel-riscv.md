@@ -1,6 +1,6 @@
-# Build Bazel-6.1.0 on RISC-V
+# Build Bazel on RISC-V
 
-## 现状
+## 5.3.0
 
 目前Bazel的官方[Github仓库](https://github.com/bazelbuild/bazel)并不支持RISC-V架构；openEuler的[软件包仓](https://gitee.com/src-openeuler)里面有相应的[Bazel库](https://gitee.com/src-openeuler/bazel)可供使用。
 
@@ -23,11 +23,17 @@ dnf install /var/tmp/build-root/mainline_riscv64-riscv64/home/abuild/rpmbuild/RP
 
 注：obs原仓库中的jdk使用的是本地jdk，当用bazel构建java项目时会报错，所以这里改成了从线上拉取jdk
 
-## 构建过程
+## 6.1.0
 
 在RISC-V上构建6.1.0版本的Bazel时，可以按照5.3.0的补丁对6.1.0-dist进行手动修改，这样可以正确编译cpp项目，但是如果想要编译java项目，则不能只按照5.3.0的方式来修改，因为Bazel的源码发生了[变化1](https://github.com/bazelbuild/bazel/commit/b74111671713f132869b94cf3686cc427c67663a?diff=split&w=1#diff-71b1b422b92a8ed8ad51762a6f203632dddcff633df7f4bf3328adaa2d961a08)和[变化2](https://github.com/bazelbuild/bazel/commit/d5559c16ac008b86345fbbade5d600181a2fce6f?diff=split&w=1)。
 
 按照构建bazel5.3.0的方式，拉取obs仓库，然后将bazel.spec文件改为[这样](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.1.0/bazel.spec)，然后从Github官网拉取bazel-6.1.0-dist[文件](https://github.com/bazelbuild/bazel/releases/download/6.1.0/bazel-6.1.0-dist.zip)，然后打上[补丁](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.1.0/bazel610-riscv64.patch)，然后 `osc build`即可。
+
+## 6.5.0
+
+在RISC-V上构建6.5.0的Bazel时，其Bazel的源码修改与6.1.0相类似，但是Bazel调用的外部库abseil-cpp在6.1.0中采用的是20211102.0版而6.5.0采用的是20230802.0版，所以需要制作20230802.0版的补丁以解决rdcycle问题。
+
+按照构建bazel5.3.0的方式，拉取obs仓库，然后将bazel.spec文件改为这样，然后从Github官网拉取bazel-6.5.0-dist文件，然后打上补丁，然后osc build即可。
 
 ## 验证
 

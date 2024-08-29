@@ -2,7 +2,7 @@
 
 [05 Install the rpm package to the user path](24-Q3/rpm-user.md)
 
-[04 Build Bazel6.1.0 on RISC-V](24-Q3/build-bazel610-riscv.md)
+[04 Build Bazel on RISC-V](24-Q3/build-bazel-riscv.md)
 
 [03 How to Get SHA256](24-Q3/how-to-get-sha256.md)
 
