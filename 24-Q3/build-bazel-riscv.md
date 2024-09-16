@@ -1,5 +1,7 @@
 # Build Bazel on RISC-V
 
+如果在构建过程中遇到问题,可以参考[仓库](https://github.com/6eanut/Tensorflow_armAndBazel_riscv)
+
 ## 5.3.0
 
 目前Bazel的官方[Github仓库](https://github.com/bazelbuild/bazel)并不支持RISC-V架构；openEuler的[软件包仓](https://gitee.com/src-openeuler)里面有相应的[Bazel库](https://gitee.com/src-openeuler/bazel)可供使用。
