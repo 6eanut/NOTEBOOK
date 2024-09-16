@@ -10,7 +10,7 @@ diff -urN a/distdir_deps.bzl b/distdir_deps.bzl
 +        "sha256": "6935a1e5af55363e37c5dc5a61bc220f347bbb36839e0e9f96dc1b75d079773c",
 +        "strip_prefix": "java-11-openjdk",
 +        "urls": [
-+            "https://github.com/6eanut/bazel/releases/download/jdk/remotejdk11_linux_riscv64.tar.gz",
++            "https://github.com/6eanut/temp/releases/download/remotejdk11_linux_riscv64.tar.gz/remotejdk11_linux_riscv64.tar.gz",
 +        ],
 +        "used_in": [],
 +    },
@@ -198,7 +198,7 @@ diff -urN a/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WOR
 -
 +    name = "remotejdk11_linux_riscv64",
 +    strip_prefix = "java-11-openjdk",
-+    urls = ["https://github.com/6eanut/bazel/releases/download/jdk/remotejdk11_linux_riscv64.tar.gz"],
++    urls = ["https://github.com/6eanut/temp/releases/download/remotejdk11_linux_riscv64.tar.gz/remotejdk11_linux_riscv64.tar.gz"],
 +
 +    target_compatible_with = [
 +        "@platforms//os:linux",

@@ -1,5 +1,7 @@
 # 24-Q3
 
+[06 Exclusive OR](24-Q3/ExclusiveOr.md)
+
 [05 Install the rpm package to the user path](24-Q3/rpm-user.md)
 
 [04 Build Bazel on RISC-V](24-Q3/build-bazel-riscv.md)
