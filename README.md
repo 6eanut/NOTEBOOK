@@ -1,6 +1,6 @@
 # 24-Q4
 
-[00 Classification of ISA (method of using data according to instructions)](24-Q4/00_ClassificationofISA.md)
+[00 Classification of ISA](24-Q4/00_ClassificationofISA.md)
 
 # 24-Q3
 
