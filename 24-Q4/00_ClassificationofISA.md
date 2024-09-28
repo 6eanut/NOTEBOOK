@@ -1,4 +1,4 @@
-# Classification of ISA (method of using data according to instructions)
+# Classification of ISA
 
 > 最近在看[RISC-V v1手册](https://6eanut.github.io/RISCV-READ/RISC-V-Reader-Chinese-v1.pdf)的中文译版，在第一章里面讲到ISA可以分为模块化的和增量化的，还举了很生动的[例子](https://6eanut.github.io/RISCV-READ/01_RISC-V.html)来比喻两者
 >
