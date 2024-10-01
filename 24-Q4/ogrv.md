@@ -1,19 +1,19 @@
 # OpenGauss RISC-V
 
-> 本文档主要用来从零搭建OpenGauss RISC-V
+> 本文档主要用来参考搭建OpenGauss RISC-V
 
 演示环境：[Fedora39](https://hub.docker.com/r/imbearchild/fedora-rv64)（Docker环境）
 
-## 环境搭建
+## 0-环境准备
 
-### 基础软件包
+### Ⅰ-基础软件包
 
 ```
 dnf update -y
 dnf install wget tar gzip gcc gcc-g++ lbzip2 bison flex texinfo expect diffutils -y
 ```
 
-### gcc10.3
+### Ⅱ-gcc10.3
 
 ```
 mkdir /user/local/gcc-10.3.0 -p
@@ -28,4 +28,4 @@ mkdir build; cd build
 make; make install
 ```
 
-### python3.11.6
+### Ⅲ-python3.11.6
