@@ -10,7 +10,7 @@
 
 ```
 dnf update -y
-dnf install wget tar gzip gcc gcc-g++ lbzip2 bison flex texinfo expect diffutils -y
+dnf install wget tar gzip gcc gcc-g++ bison flex texinfo expect diffutils -y
 ```
 
 ### Ⅱ-gcc10.3
