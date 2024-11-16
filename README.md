@@ -1,5 +1,7 @@
 # 24-Q4
 
+[02 Linux Config Analyze](24-Q4/02_linux-config.md)
+
 [01 sysMaster](24-Q4/01_sysMaster.md)
 
 [00 Classification of ISA](24-Q4/00_ClassificationofISA.md)
