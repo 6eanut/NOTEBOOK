@@ -1,5 +1,9 @@
 # 25-Q1
 
+[02 Customizing Linux kernel Modules](25-Q1/02_my_linux_module.md)
+
+[01 Syzkaller](25-Q1/01_Syzkaller.md)
+
 [00 Static Analyzer in DAFL](25-Q1/00_Static_Analyzer_in_DAFL.md)
 
 # 24-Q4

@@ -1,0 +1,5 @@
+lsmod
+make
+insmod mymodule.ko
+rmmod mymodule
+dmesg
