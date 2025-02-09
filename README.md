@@ -47,7 +47,3 @@
 [01 Python-venv](24-Q2/python-venv.md)
 
 [00 Restricting CPU and Memory Usage](24-Q2/Restricting_CPU_and_Memory_Usage.md)
-
-浏览总量：
-<span id="busuanzi_value_site_pv"></span>次 
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
