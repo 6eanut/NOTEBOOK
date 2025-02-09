@@ -178,27 +178,26 @@ syzkaller@jiakai:~/syzkaller$ tree -L 1
 ├── bin
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTORS
-├── dashboard		<-
-├── docs		<-
-├── executor		<-
-├── fuzz.cfg		<-
-├── go.mod		<-
-├── go.sum		<-
+├── dashboard		<-和使用syzbot相关
+├── docs		<-说明文档
+├── executor		<-由manager启动，运行在VM上，通过RPC接收manager的program，返回错误状态、覆盖率等测试结果
+├── fuzz.cfg		<-syzkaller进行fuzz的配置文件
+├── go.mod
+├── go.sum
 ├── LICENSE
 ├── Makefile
-├── my.cfg		<-
-├── pkg			<-
-├── prog		<-
+├── pkg
+├── prog		<-包含analyze, generate, mutate, minimize, validate等程序
 ├── README.md
-├── sys			<-
-├── syz-ci		<-
-├── syz-cluster		<-
-├── syz-hub		<-
-├── syz-manager		<-
-├── syz-verifier	<-
-├── tools		<-
-├── vm			<-
-└── workdir		<-
+├── sys			<-用Syzlang描述的syscall
+├── syz-ci		<-和使用syzbot相关
+├── syz-cluster
+├── syz-hub		<-syz-hub支持运行多个syz-manager
+├── syz-manager		<-运行在host上，启动/重启/监控VM，产生输入、变异、最小化等，存储crash
+├── syz-verifier
+├── tools		<-封装pkg中的接口，包括其他工具
+├── vm			<-对虚拟机相关操作的代码，比如adb，qemu，vmware等，供manager调用
+└── workdir
 ```
 
 ## Syzkaller的工作原理
