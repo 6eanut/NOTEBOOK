@@ -48,16 +48,6 @@
 
 [00 Restricting CPU and Memory Usage](24-Q2/Restricting_CPU_and_Memory_Usage.md)
 
-### 欢迎访问我的博客
-
-这里可以放置您的内容。
-
-- 显示站点总访问量：
-  <span id="busuanzi_value_site_pv"></span>次 
-  (确保在文档末尾或相应位置加入脚本)
-  
-- 显示单页面访问量：
-  <span id="busuanzi_value_page_pv"></span>次 
-
-请确保在Markdown文件的底部或者<head>标签内（如果是HTML混合使用的情况下）加入如下脚本引用：
+浏览总量：
+<span id="busuanzi_value_site_pv"></span>次 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
