@@ -186,7 +186,7 @@ syzkaller@jiakai:~/syzkaller$ tree -L 1
 ├── go.sum
 ├── LICENSE
 ├── Makefile
-├── pkg
+├── pkg			<-fuzzer、db、manager等包，实现底层功能
 ├── prog		<-包含analyze, generate, mutate, minimize, validate等程序
 ├── README.md
 ├── sys			<-用Syzlang描述的syscall
@@ -194,10 +194,18 @@ syzkaller@jiakai:~/syzkaller$ tree -L 1
 ├── syz-cluster
 ├── syz-hub		<-syz-hub支持运行多个syz-manager
 ├── syz-manager		<-运行在host上，启动/重启/监控VM，产生输入、变异、最小化等，存储crash
-├── syz-verifier
+├── syz-verifier	<-通过比较不同版本的Linux内核执行程序的结果来检测语义错误
 ├── tools		<-封装pkg中的接口，包括其他工具
 ├── vm			<-对虚拟机相关操作的代码，比如adb，qemu，vmware等，供manager调用
 └── workdir
 ```
 
 ## Syzkaller的工作原理
+
+![1739153958807](image/01_Syzkaller/1739153958807.png)
+
+* syz-manager运行在host上，syz-executor运行在VM上
+* syz-manager会在每个VM上启动一个syz-executor，两者通过RPC进行通信，前者向后者传递需要执行的程序，后者向前者返回执行结果
+* syz-executor会启动subprocess来执行程序
+* subprocess会执行一个syscall序列
+* syz-manager的功能：1启动、重启、监控VM实例；2输入生成、变异、最小化等；3持久化语料库和crash存储
