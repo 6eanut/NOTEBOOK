@@ -37,6 +37,8 @@ dnf install /var/tmp/build-root/mainline_riscv64-riscv64/home/abuild/rpmbuild/RP
 
 按照构建bazel5.3.0的方式，拉取obs仓库，然后将bazel.spec文件改为这样，然后从Github官网拉取bazel-6.5.0-dist[文件](https://github.com/bazelbuild/bazel/releases/download/6.5.0/bazel-6.5.0-dist.zip)，然后打上[补丁](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/bazel650.patch)，还需要下载abseil-cpp的补丁[文件](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/abseil-cpp-riscv-01.patch)，还有更新过后的04-riscv-distdir_deps-01补丁[文件](https://github.com/6eanut/NOTEBOOK/blob/main/24-Q3/bazel/6.5.0/04-riscv-distdir_deps-01.patch)，然后 `osc build`即可。
 
+或者直接使用[obs仓](https://build.tarsier-infra.isrc.ac.cn/package/show/home:6eanut:branches:home:6eanut/bazel)进行build
+
 ## 验证
 
 下载bazel的examples[仓库](https://github.com/bazelbuild/examples)，然后分别测试cpp和java。
@@ -62,7 +64,7 @@ dnf install osc
 https://download.opensuse.org/repositories/openSUSE:/Tools/Fedora_Rawhide/noarch/
 
 ```
-# 在上方链接中下载obs-build-mkbaselibs和obs-build的rpm包
+# 在上方链接中下载obs-build-mkbaselibs和obs-build的rpm包，注意先装obs-build-mkbaselibs后装obs-build
 dnf install obs-build-mkbaselibs obs-build
 vi ~/.oscrc
 # 写入以下内容：
