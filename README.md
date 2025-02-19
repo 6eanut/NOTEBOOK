@@ -1,5 +1,9 @@
 # 25-Q1
 
+[04 X86 and X64？](25-Q1/04_play_with_x86.md)
+
+[03 QEMU OERV](25-Q1/03_qemu_oerv.md)
+
 [02 Customizing Linux kernel Modules](25-Q1/02_my_linux_module.md)
 
 [01 Syzkaller](25-Q1/01_Syzkaller.md)
