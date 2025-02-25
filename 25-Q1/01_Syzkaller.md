@@ -1,5 +1,3 @@
-[toc]
-
 # Syzkaller
 
 Syzkaller is an unsupervised coverage-guided kernel fuzzer.
