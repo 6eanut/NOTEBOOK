@@ -1,6 +1,12 @@
 # Syzkaller
 
-Syzkaller是一个内核Fuzz工具，本文记录使用方法、源码结构和工作原理。
+Syzkaller is an unsupervised coverage-guided kernel fuzzer.
+
+* 测试过程不需要人工干预；
+* 优先选择可以触发新路径的种子做进一步测试；
+* 内核模糊测试工具。
+
+https://github.com/google/syzkaller
 
 ## Syzkaller的使用方法
 
@@ -200,7 +206,164 @@ syzkaller@jiakai:~/syzkaller$ tree -L 1
 └── workdir
 ```
 
+---
+
+Syzkaller的运行由命令 `./bin/syz-manager -config=fuzz.cfg`来执行，故而syz-manager二进制可执行程序是分析的入手点。
+
+### syz-manager
+
+```
+manager: descriptions
+	GOOS=$(HOSTOS) GOARCH=$(HOSTARCH) $(HOSTGO) build $(GOHOSTFLAGS) -o ./bin/syz-manager github.com/google/syzkaller/syz-manager
+```
+
+syzkaller下的Makefile文件中的上述命令用于编译syz-manager程序，可知源代码是syzkaller/syz-manager下的代码
+
+```
+syz-manager % tree
+.
+├── hub.go		<-与分布式相关
+├── hub_test.go		<-分布式相关的的测试文件
+├── manager.go		<-核心部分
+├── snapshot.go		<-快照功能
+└── stats.go		<-统计信息功能
+```
+
+这里先不管分布式相关的代码，先从核心部分manager.go文件入手
+
+* 该文件中main函数为入口函数，经分析可知其核心函数为RunManager
+  * RunManager函数会调用preloadCorpus函数
+    * preloadCorpus函数会调用LoadSeeds函数来加载corpus.db和调用readInputs函数
+      * readInputs函数会加载syzkaller/sys/linux/test下的种子文件
+  * RunManager函数会调用fuzzerInstance函数
+    * fuzzerInstance函数会调用runInstanceInner函数
+      * runInstanceInner函数会调用Run函数来运行syz-executor，参数为runner
+  * RunManager函数会调用Loop函数
+    * Loop函数会调用runInstance函数
+      * runInstance函数会调用job函数
+
+[代码阅读批注](https://github.com/6eanut/syzkaller/commit/70cf61f3f5b48be035a907035319a55d29adae15)
+
+### syz-executor
+
+通过上面的分析，可以知道，syz-manager会通过ssh在虚拟机里面执行syz-executor这个二进制可执行程序，故而这是后续的分析着手点
+
+```
+mkdir -p ./bin/$(TARGETOS)_$(TARGETARCH)
+$(CXX) -o ./bin/$(TARGETOS)_$(TARGETARCH)/syz-executor$(EXE) executor/executor.cc \
+	$(ADDCXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -DGOOS_$(TARGETOS)=1 -DGOARCH_$(TARGETARCH)=1 \
+	-DHOSTGOOS_$(HOSTOS)=1 -DGIT_REVISION=\"$(REV)\"
+```
+
+syzkaller下的Makefile文件中的上述命令用于编译syz-executor程序，可知源代码是syzkaller/executor/executor.cc
+
+```
+executor % tree
+.
+├── _include
+│   └── flatbuffers			<-高效的序列化库，广泛用于高效的数据传输和存储
+├── android				<-针对安卓平台的文件
+├── common.h				<-通用头文件，定义了跨平台的基本宏、常量和函数声明
+├── common_bsd.h			<-针对不同操作系统或特定功能的扩展头文件
+├── common_ext.h
+├── common_ext_example.h
+├── common_fuchsia.h
+├── common_kvm_amd64.h
+├── common_kvm_arm64.h
+├── common_kvm_arm64_syzos.h
+├── common_kvm_ppc64.h
+├── common_linux.h
+├── common_openbsd.h
+├── common_test.h
+├── common_usb.h
+├── common_usb_linux.h
+├── common_usb_netbsd.h
+├── common_windows.h
+├── common_zlib.h
+├── conn.h				<-与网络连接相关的接口和数据结构
+├── cover_filter.h			<-覆盖率过滤器的实现
+├── embed.go
+├── executor.cc				<-执行器实现文件
+├── executor_bsd.h			<-针对不同操作系统的执行器头文件
+├── executor_darwin.h
+├── executor_fuchsia.h
+├── executor_linux.h
+├── executor_runner.h
+├── executor_test.h
+├── executor_windows.h
+├── files.h				<-文件操作相关的接口和数据结构
+├── gen_linux_amd64.go
+├── gen_linux_ppc64le.go
+├── kvm.h				<-与kvm相关的文件
+├── kvm_amd64.S
+├── kvm_amd64.S.h
+├── kvm_gen.cc
+├── kvm_ppc64le.S
+├── kvm_ppc64le.S.h
+├── nocover.h
+├── shmem.h				<-共享内存相关的接口和数据结构，用于进程间通信
+├── snapshot.h				<-快照机制相关的接口和数据结构，用于保存和恢复虚拟机状态
+├── style_test.go
+├── subprocess.h			<-子进程管理相关的接口和数据结构
+├── test.h
+└── test_linux.h
+```
+
+下面将从executor.cc的main函数入手
+
+* main函数会根据第一个参数的值做不同的操作，因为syz-manager在执行syz-executor时给出的参数是runner，所以下面先看runner
+  * runner函数位于executor_runner.h中，runner函数会实例一个Runner对象，并调用构造函数Runner
+    * Runner函数会调用Proc函数
+      * Proc函数会调用Start函数
+        * Start函数会调用emplace函数，执行syz-executor，并传递参数exec
+    * Runner函数会调用Loop函数
+      * Loop函数会根据manager发来的消息，进行不同的处理，比如执行请求、信号更新、语料库分类等
+        * 执行请求：调用ExecuteBinary或Execute
+          * ExecuteBinary会执行二进制程序，并把执行结果返回给manager
+          * Execute会执行请求，并和manager通信
+
+[代码阅读批注](https://github.com/6eanut/syzkaller/commit/2a83b033c81962e20668f9bfab84b5eeea4939a1)
+
+至此，syz-manager和syz-executor都会进入各自的Loop函数，等待彼此的RPC消息
+
+---
+
+* MachineChecked函数、setupFuzzer函数、BenchmarkFuzzer函数、TestFuzz函数调用NewFuzzer函数
+  * NewFuzzer函数调用newExecQueues函数
+    * newExecQueues函数调用genFuzz函数
+      * 调用mutateProgRequest来对现有Prog进行变异
+      * 调用genProgRequest生成全新的Prog
+        * 会调用prog/generation.go中的Generate函数
+          * Generate函数会调用generateCall函数
+      * 最后调用randomCollide来对前面生成的Prog做处理得到碰撞测试后的Prog
+
+---
+
+prog下的主要文件：
+
+* prio.go
+
+用于计算call-to-call的优先级。对于一个系统调用对(X,Y)，优先级指的是对于包含了X的程序，如果加入了Y，程序出现新的代码覆盖的可能性。当前包含静态和动态两种算法。静态算法基于参数类型的分析，动态算法基于语料库。
+
+* mutation.go
+
+用于对程序进行变异。比如，将当前程序的一部分与语料库中另一个随机选择的程序的部分拼接起来，生成一个新的程序；随机去除程序中的一个call；对程序中的某个随机系统调用的参数进行变异操作等
+
+* generation.go
+
+用于生成一个包含指定数量的系统调用的程序，同时可以指定可选的系统调用集。
+
+* minimization.go
+
+用于对程序进行简化，删除无关的系统调用和对单个系统调用进行简化，并且保持等价。
+
+---
+
+![1740447160164](image/01_Syzkaller/1740447160164.png)
+
 ## Syzkaller的工作原理
+
+下图是Syzkaller Github提供的原理示意图以及相关说明。
 
 ![1739153958807](image/01_Syzkaller/1739153958807.png)
 
@@ -209,3 +372,39 @@ syzkaller@jiakai:~/syzkaller$ tree -L 1
 * syz-executor会启动subprocess来执行程序
 * subprocess会执行一个syscall序列
 * syz-manager的功能：1启动、重启、监控VM实例；2输入生成、变异、最小化等；3持久化语料库和crash存储
+
+---
+
+假如人工对内核做测试，一般就是在应用层编写程序，即执行一些系统调用，然后观察执行过程是否报错，最后去做分析。
+
+Syzkaller简化了这一过程，其可以自动地生成测试用例，即系统调用序列，开发者可以指定哪些系统调用不被考虑到测试中或者指定测试某些系统调用，默认情况下是所有支持的系统调用，这需要Syzlang来编写。
+
+整个测试过程不需要人工干预，包括测试用例的生成、编译、程序执行等。、
+
+至于什么样的测试用例拥有更高的优先级，由覆盖率引导，这需要借助内核的KCOV配置选项。
+
+---
+
+Syzkaller需要至少host和vm两台机器，syz-manager运行在host上，其会通过ssh服务把syz-executor等传到vm上。syz-manager负责测试用例的生成、变异和最小化以及语料库、crash的存储，syz-executor负责执行测试用例，将执行结果返回给syz-manager。
+
+整个过程中值得关注的是种子的筛选和排序。这涉及下图三个重要的数据结构，即ChoiceTable、Prog和Corpus。
+
+![1740445872409](image/01_Syzkaller/1740445872409.png)
+
+* ChoiceTable
+  * 系统调用的集合，可以指定系统调用enable或disable，默认是全部支持的系统调用，即用Syzlang描述的系统调用。
+  * 每个系统调用都有自己的优先级，分为静态和动态两部分。
+    * 静态是基于系统调用参数类型而决定的。
+    * 动态是基于语料库中系统调用对的实际出现频率而决定的。
+* Corpus
+  * 种子的集合，即系统调用序列的集合。
+  * 每个种子都有自己的优先级，其考虑的因素不仅仅是覆盖率，还有稳定性。
+    * 基本块覆盖或边缘覆盖。
+    * 某个种子执行过后，出现新覆盖，但若重现，并不是100%可以发生相同的结果。
+* Prog
+  * 种子，即系统调用序列。
+  * 由ChoiceTable、Corpus、Prog和一定的随机数因子决定。
+  * 比如可以增删系统调用、和语料库中的某个种子结合等。
+  * 会检验有效性。
+
+Syzkaller自己定义了一套描述系统调用模板的声明式语言Syzlang，这个声明式语言是一个txt，根据Syzlang的语法，在txt中描述接口信息以及参数格式。
