@@ -2,7 +2,9 @@
 
 > 当人工对Linux Kernel做测试时，一般是在应用层编写一个程序，这个程序会执行一些系统调用，然后观察执行的过程和分析执行的结果。
 
-## step1：在应用层，编写一个程序，编译并运行
+## step1：观察现有系统调用
+
+### 在应用层，编写一个程序，编译并运行
 
 ```c
 #include <unistd.h>
@@ -30,7 +32,7 @@ int main() {
 
 程序中用到了 `SYS_write`，并且可以推测出与系统调用相关的头文件是unistd.h和sys/syscall.h
 
-## step2：查看系统中的unistd.h和sys/syscall.h
+### 查看系统中的unistd.h和sys/syscall.h
 
 可以利用 `find . -name unistd.h`和 `find . -name syscall.h`来找到系统中这两个文件，前者与POSIX(Portable Operating System Interface)有关，这里只看后者
 
@@ -185,7 +187,7 @@ __SYSCALL(__NR_fremovexattr, sys_fremovexattr)
 
 以上，我们知道最初的那个C程序中的 `SYS_write`其实只是一个数字，即系统调用号。
 
-## step3：将系统调用号和系统调用联系起来
+### 将系统调用号和系统调用联系起来
 
 linux-5.4.285/arch/arm/tools/syscall.tbl中记录了系统调用号和系统调用之间的映射，故而可以得到系统调用名称
 
@@ -226,7 +228,7 @@ linux-5.4.285/arch/arm/tools/syscall.tbl中记录了系统调用号和系统调�
 ...
 ```
 
-## step4：系统调用实现在哪里
+### 系统调用实现在哪里
 
 在上面的tbl表中可以找到系统调用名称，具体的实现是在源码的各个目录下，以write系统调用为例，其实现位于fs的read_write.c文件下：
 
@@ -238,7 +240,7 @@ SYSCALL_DEFINE3(write, unsigned int, fd, const char __user *, buf,
 }
 ```
 
-## step5：定制一个系统调用
+## step2：定制一个系统调用
 
 > 定制系统调用有两种方法：
 >
@@ -268,6 +270,15 @@ SYSCALL_DEFINE1(mysyscall, long, num)
 }
 
 ```
+
+> asmlinkage告诉编译器，函数的参数通过栈传递而非寄存器。
+>
+> 栈传递和寄存器传递的对比：
+>
+> * 前者兼容性好，几乎所有架构和编译器都支持；后者不同架构的寄存器布局和调用约定可能不同。
+> * 前者参数存在栈中，方便调试；后者寄存器内容不易直接观察，调试复杂度较高。
+> * 前者适合参数数量可变或不确定的情况。
+> * 前者需要内存访问，速度慢；后者寄存器访问速度远快于内存。
 
 #### 分配系统调用号
 
