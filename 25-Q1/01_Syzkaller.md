@@ -79,6 +79,14 @@ chmod +x create-image.sh
 
 ![1738914222137](image/01_Syzkaller/1738914222137.png)
 
+查看image信息：`qemu-img info bullseye.img`
+
+![1740708768893](image/01_Syzkaller/1740708768893.png)
+
+image扩容：修改create-image.sh中SEEK的值
+
+![1740710460292](image/01_Syzkaller/1740710460292.png)
+
 ### Qemu启动
 
 ```
