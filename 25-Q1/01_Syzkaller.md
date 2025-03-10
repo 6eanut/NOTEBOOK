@@ -404,15 +404,23 @@ Syzkaller需要至少host和vm两台机器，syz-manager运行在host上，其�
   * 每个系统调用都有自己的优先级，分为静态和动态两部分。
     * 静态是基于系统调用参数类型而决定的。
     * 动态是基于语料库中系统调用对的实际出现频率而决定的。
+  * [详细说明](syzkaller/2-ChoiceTable/ChoiceTable.md)
+  * [相关代码](syzkaller/2-ChoiceTable/ChoiceTable.drawio.png)
 * Corpus
   * 种子的集合，即系统调用序列的集合。
   * 每个种子都有自己的优先级，其考虑的因素不仅仅是覆盖率，还有稳定性。
     * 基本块覆盖或边缘覆盖。
     * 某个种子执行过后，出现新覆盖，但若重现，并不是100%可以发生相同的结果。
+  * [详细说明](syzkaller/3-Corpus/Corpus.md)
+  * [相关代码](syzkaller/3-Corpus/Corpus.drawio.png)
 * Prog
   * 种子，即系统调用序列。
   * 由ChoiceTable、Corpus、Prog和一定的随机数因子决定。
   * 比如可以增删系统调用、和语料库中的某个种子结合等。
   * 会检验有效性。
 
+## Syzlang
+
 Syzkaller自己定义了一套描述系统调用模板的声明式语言Syzlang，这个声明式语言是一个txt，根据Syzlang的语法，在txt中描述接口信息以及参数格式。
+
+语法详见：[这里](syzkaller/1-syzlang/syzlang.md)。
