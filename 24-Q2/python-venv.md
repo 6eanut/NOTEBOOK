@@ -44,3 +44,41 @@ deactivate
 但是，如果像之前移植opengauss的项目，那最好还是用anaconda，因为它可以切换python版本。所以到底用不用anaconda，用不用venv，还是要看具体情况。
 
 接触项目越多，越发现版本的重要性，还是要先弄清楚版本，然后会更方便。
+
+---
+
+# pyenv(20250320)
+
+[pyenv](https://github.com/pyenv/pyenv)是一个python的版本管理工具，支持下载多个版本的python并进行自由切换，其是一个开源项目。
+
+## 安装
+
+```
+# 装依赖包
+sudo apt install curl libssl-dev libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev libffi-dev tk-dev
+# 安装pyenv
+curl -fsSL https://pyenv.run | bash
+# 配置pyenv
+export PATH=/home/$(whoami)/.pyenv/bin:$PATH
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+```
+
+## 使用
+
+```
+# 查看当前系统安装的python版本有哪些
+pyenv versions
+# 安装某一版本的python
+pyenv install 3.x.x
+# 卸载某一版本的python
+pyenv uninstall 3.x.x
+# 切换到某一版本的python(整个用户空间)
+pyenv global 3.x.x
+# 切换到某一版本的python(当前目录及其子目录)
+pyenv local 3.x.x
+```
+
+## 感想
+
+pyenv是一个很强大的工具，它甚至提供在不同的工作目录下使用不同python版本的功能。
