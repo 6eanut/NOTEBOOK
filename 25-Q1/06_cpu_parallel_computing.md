@@ -97,7 +97,7 @@ mpiexec -n <number_of_processes> example_openmpi
 
 #### 2-2-1 安装
 
-```
+```shell
 # 从源码编译安装
 wget https://www.mpich.org/static/downloads/4.3.0/mpich-4.3.0.tar.gz
 tar -xvf mpich-4.3.0.tar.gz
@@ -113,7 +113,7 @@ export INCLUDE=/home/$(whoami)/my-install/mpich-install/include:$INCLUDE
 
 #### 2-2-2 编译与运行
 
-```
+```shell
 # 编译
 mpicc -o example_mpich example_mpich.c
 # 运行，注意：-n后的参数可以超过实际的CPU核数量；若example_mpich.c没有使用mpi，也可以用gcc编译后mpiexec来运行
