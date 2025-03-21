@@ -89,11 +89,36 @@ export INCLUDE=/home/$(whoami)/my-install/openmpi-install/include:$INCLUDE
 ```shell
 # 编译
 mpicc -o example_openmpi example_openmpi.c
-# 运行，注意：-n后的参数不能超过实际的CPU核数量；若example_openmp.c没有使用mpi，也可以用gcc编译后mpiexec来运行
+# 运行，注意：-n后的参数不能超过实际的CPU核数量；若example_openmpi.c没有使用mpi，也可以用gcc编译后mpiexec来运行
 mpiexec -n <number_of_processes> example_openmpi
 ```
 
 ### 2-2 MPICH
+
+#### 2-2-1 安装
+
+```
+# 从源码编译安装
+wget https://www.mpich.org/static/downloads/4.3.0/mpich-4.3.0.tar.gz
+tar -xvf mpich-4.3.0.tar.gz
+cd mpich-4.3.0
+./configure --prefix=/home/$(whoami)/my-install/mpich-install --disable-fortran
+make
+make install
+# 环境变量配置
+export PATH=/home/$(whoami)/my-install/mpich-install/bin:$PATH
+export LD_LIBRARY_PATH=/home/$(whoami)/my-install/mpich-install/lib:$LD_LIBRARY_PATH
+export INCLUDE=/home/$(whoami)/my-install/mpich-install/include:$INCLUDE
+```
+
+#### 2-2-2 编译与运行
+
+```
+# 编译
+mpicc -o example_mpich example_mpich.c
+# 运行，注意：-n后的参数可以超过实际的CPU核数量；若example_mpich.c没有使用mpi，也可以用gcc编译后mpiexec来运行
+mpiexec -n <number_of_processes> ./example_mpich
+```
 
 ### 2-3 例子
 
