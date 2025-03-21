@@ -1,5 +1,7 @@
 # 25-Q1
 
+[06 CPU Parallel Computing](25-Q1/06_cpu_parallel_computing.md)
+
 [05 Customizing Linux Kernel Syscall](25-Q1/05_my_linux_syscall.md)
 
 [04 X86 and X64？](25-Q1/04_play_with_x86.md)
