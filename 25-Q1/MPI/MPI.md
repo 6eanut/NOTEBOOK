@@ -327,6 +327,21 @@ int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datat
 
 ```c
 // collective communicate
-    double partial_sum = sum;
-    MPI_Reduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+double partial_sum = sum;
+MPI_Reduce(&partial_sum, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+```
+
+除此之外，还有一些其他接口可供使用，可以在实际编程中相应进行查询，比如：
+
+```c
+// MPI_Bcast：用于初始化、全局配置同步
+// MPI_Scatter：将数据拆分后发给各进程
+// MPI_Scatterv：支持指定拆分方式
+
+// MPI_Gather：汇总计算结果
+// MPI_Alltoall：发送部分数据，并接受数据
+
+// MPI_Reduce：规约操作
+// MPI_Allreduce：规约操作，结果返回给所有进程
+// MPI_Reduce_scatter：先规约后分散
 ```
