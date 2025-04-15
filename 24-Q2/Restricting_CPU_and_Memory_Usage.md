@@ -63,3 +63,32 @@ sudo swapon /swapfile
 swapon --show
 echo "/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
 ```
+
+---
+
+如果说磁盘不够怎么办？又不想删除某个大型文件，感觉之后会用到，那么可以采用压缩工具进行压缩，后续使用到时再解压缩。
+
+```shell
+xz -9 -T0 -v file  # -9:最高压缩比 -T0:多线程 -v:显示进度
+unxz file.xz  # 或使用等效命令：xz -d file.xz
+```
+
+找不到大型文件？可以查看各个目录所占的磁盘情况：
+
+```shell
+sudo du -sh /home/*  # -s: 显示总计 -h: 人类可读格式
+sudo du -h --max-depth=1 /home/user1  # 查看user1主目录下的一级子目录大小
+```
+
+例如：
+
+```shell
+syzkaller@jiakai:~/images$ ls -al
+-rw-rw-r--  1 syzkaller syzkaller 41944088576 Mar 11 02:13 bullseye.img
+syzkaller@jiakai:~/images$ xz -9 -T0 -v bullseye.img
+bullseye.img (1/1)
+  100 %        312.1 MiB / 39.1 GiB = 0.008    56 MiB/s      11:53
+syzkaller@jiakai:~/images$ ls -al
+-rw-rw-r--  1 syzkaller syzkaller 327258044 Mar 11 02:13 bullseye.img.xz
+# 可以看到文件由39.1GiB被压缩到了312.1MiB，压缩比极高
+```
