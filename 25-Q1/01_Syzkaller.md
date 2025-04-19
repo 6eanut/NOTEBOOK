@@ -10,13 +10,23 @@ https://github.com/google/syzkaller
 
 ## Syzkaller的使用方法
 
+这里提供docker image：
+
+```shell
+docker pull 6eanut/syzkaller:done
+# 启动qemu
+./start_qemu.sh
+# 进入/root/syzkaller目录下，开始fuzz
+./bin/syz-manager -config=fuzz.cfg
+```
+
 ### Go环境搭建
 
 Syzkaller大部分由Go语言编写，其次是C和C++，故而需要准备好这些工具。
 
 ```
 sudo apt update
-sudo apt install make gcc flex bison libncurses-dev libelf-dev libssl-dev
+sudo apt install make gcc g++ wget vim flex bison libncurses-dev libelf-dev libssl-dev git bc qemu-system-x86
 
 wget https://dl.google.com/go/go1.22.1.linux-amd64.tar.gz
 tar -xf go1.22.1.linux-amd64.tar.gz
@@ -57,7 +67,7 @@ make kvm_guest.config
 # CONFIG_CONFIGFS_FS=y
 # CONFIG_SECURITYFS=y
 make olddefconfig
-make -j`nproc`
+make -j
 ```
 
 编译成功后，可以得到vmlinux和bzImage。
