@@ -1,5 +1,7 @@
 # 25-Q2
 
+[01 Syzdirect](25-Q2/01_syzdirect.md)
+
 [00 Docker Startup](25-Q2/00_docker.md)
 
 # 25-Q1
