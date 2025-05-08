@@ -1,4 +1,4 @@
-# tmux
+# tmux Startup
 
 本文记录tmux的使用方法，为了方便查阅：
 
