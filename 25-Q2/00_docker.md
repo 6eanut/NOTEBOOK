@@ -56,6 +56,12 @@ docker tag "IMAGE ID" repository:tag
 docker run -it [--cpus="8" --memory="32g"] repository:tag /bin/bash
 ```
 
+因为在容器里面做开发可能不太方便，比如不能通过vscode连接到容器，只能连接到host，故而可以选择将容器挂载到host下：
+
+```shell
+docker run -v /宿主机/目录:/容器内/路径 -it repository:tag /bin/bash
+```
+
 ## 容器更名
 
 ```shell
