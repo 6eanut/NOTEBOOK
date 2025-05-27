@@ -62,6 +62,20 @@ docker run -it [--cpus="8" --memory="32g"] repository:tag /bin/bash
 docker run -v /宿主机/目录:/容器内/路径 -it repository:tag /bin/bash
 ```
 
+如果host支持kvm，那么也可以让容器支持：
+
+```shell
+docker run -v /宿主机/目录:/容器内/路径 -it --device=/dev/kvm repository:tag /bin/bash
+# 进入容器后，可以检查kvm
+kvm-ok
+# 查看kvm所属的用户和组
+ls -l /dev/kvm
+# 查看自己所在的组
+groups
+# 把自己加进去
+sudo usermod -aG systemd-resolve $(whoami)
+```
+
 ## 容器更名
 
 ```shell
