@@ -12,6 +12,8 @@ sudo apt install docker docker.io
 
 ```shell
 sudo usermod -aG docker $USER
+# 重新加载用户的组权限
+newgrp docker
 ```
 
 ## 查看docker版本

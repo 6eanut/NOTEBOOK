@@ -1,6 +1,8 @@
-# 搭建QEMU OERV环境
+# 搭建QEMU OpenEuler环境
 
-## 下载QEMU源码
+## 1 RISC-V
+
+### 1-1 下载QEMU源码
 
 ```
 cd ~
@@ -10,7 +12,7 @@ wget -c https://download.qemu.org/qemu-9.0.0.tar.xz
 tar -xvf qemu-9.0.0.tar.xz
 ```
 
-## 编译安装QEMU
+### 1-2 编译安装QEMU
 
 ```
 mkdir ~/path
@@ -22,7 +24,7 @@ make install
 export PATH="/home/$(whoami)/path/bin:$PATH"
 ```
 
-## 下载OERV
+### 1-3 下载OERV
 
 ```
 mkdir ~/oerv_qemu
@@ -37,10 +39,40 @@ wget https://repo.openeuler.org/openEuler-24.03-LTS/virtual_machine_img/riscv64/
 chmod +x start_vm.sh
 ```
 
-## 启动OERV_QEMU
+### 1-4 启动OERV_QEMU
 
 ```
 ./start_vm.sh
 # root用户密码默认为openEuler12#$
 ssh -p 12055 root@localhost
 ```
+
+## 2 Aarch64
+
+### 2-1 安装QEMU
+
+```shell
+sudo apt update
+sudo apt install qemu-system-arm qemu-utils
+```
+
+### 2-2 下载OpenEuler Aarch64
+
+```shell
+mkdir ~/oeaarch64_qemu
+cd ~/oeaarch64_qemu
+wget https://repo.openeuler.org/openEuler-24.03-LTS/virtual_machine_img/aarch64/openEuler-24.03-LTS-aarch64.qcow2.xz
+xz -d openEuler-24.03-LTS-aarch64.qcow2.xz
+cp /usr/share/qemu-efi-aarch64/QEMU_EFI.fd .
+```
+
+### 2-3 启动
+
+下载[start.sh](qemu_openeuler/aarch64/start.sh)文件
+
+```shell
+chmod +x start.sh
+./start.sh
+```
+
+还需要修改/etc/ssh/sshd_config，然后在host生成公密钥，把公钥添加到qemu的/root/.ssh/authorized_keys中，然后就可以[连接](qemu_openeuler/aarch64/ssh.sh)了。

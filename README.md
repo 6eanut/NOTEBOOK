@@ -16,7 +16,7 @@
 
 [04 X86 and X64？](25-Q1/04_play_with_x86.md)
 
-[03 QEMU OERV](25-Q1/03_qemu_oerv.md)
+[03 QEMU OpenEuler(RISC-V Aarch64)](25-Q1/03_qemu_openeuler.md)
 
 [02 Customizing Linux Kernel Modules](25-Q1/02_my_linux_module.md)
 
