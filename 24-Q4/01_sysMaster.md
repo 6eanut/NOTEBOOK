@@ -2,6 +2,16 @@
 
 源码仓库：[https://gitee.com/openeuler/sysmaster](https://gitee.com/openeuler/sysmaster)
 
+## 20250528
+
+硬件CPU在通电后会进入Reset State，而后会执行Firmware，即下面所说的BIOS，执行完Firmware后会去磁盘上加载第0号扇区，即前512字节的内容，这段内容是Master Boot Record，这个MBR会去加载内核等后面的内容。
+
+在X86里面，MBR的最后内容会设置成0x55 0xAA，以此来检验这块数据是否有效。Firmware会把MBR的内容加载到内存的0x7c00位置。
+
+在RISC-V里面，CPU进入reset state之后，会执行OpenSBI等firmware，然后会去加载内核，固件的入口一般规定在0x80000000.
+
+---
+
 ## 0-背景
 
 Linux的启动流程大致如下:
