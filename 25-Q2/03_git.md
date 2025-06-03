@@ -23,7 +23,7 @@ Host {username}
 ssh -T git@{username}
 ```
 
-然后应该能看到`Hi {username}!`的打印信息。
+然后应该能看到 `Hi {username}!`的打印信息。
 
 ## 2 clone仓库
 
@@ -49,3 +49,11 @@ git remote set-url origin git@{username}:repoPath/reponame.git
 ```
 
 在此之后，就可以做代码修改，而后add、commit和push了。
+
+## 4 联系maintainer
+
+当社区内的资料不够多，并且其他网站的材料也没多少时，邮件联系maintainer是个不错的方法，有时人们并不会把自己的联系邮件放荡profile里面，但是git提供了很好的帮助，我们能找到做出commit最多的几个用户。
+
+```shell
+git log --pretty="%ae" | sort | uniq -c | sort -nr | head -6
+```

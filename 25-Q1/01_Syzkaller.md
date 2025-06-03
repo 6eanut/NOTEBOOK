@@ -97,6 +97,15 @@ image扩容：修改create-image.sh中SEEK的值
 
 ![1740710460292](image/01_Syzkaller/1740710460292.png)
 
+另一种扩容的方法(20250603)：
+
+```shell
+sudo apt-get install e2fsprogs
+e2fsck -f bullseye.img
+truncate -s 4G bullseye.img
+resize2fs bullseye.img
+```
+
 ### Qemu启动
 
 ```
