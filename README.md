@@ -1,5 +1,7 @@
 # 25-Q2
 
+[04 GPU Parallel Computing](25-Q2\04_gpu_parallel_computing.md)
+
 [03 git Startup](25-Q2/03_git.md)
 
 [02 tmux Startup](25-Q2/02_tmux.md)

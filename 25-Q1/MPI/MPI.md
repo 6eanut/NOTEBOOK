@@ -78,7 +78,7 @@ $ ls
 ### 2-2 运行
 
 ```shell
-$ mpiexec -n 4 01_startup
+$ mpiexec -n 4 ./01_startup
 MPI_COMM_WORLD size: 4,  My Rank : 0
 MPI_COMM_WORLD size: 4,  My Rank : 1
 MPI_COMM_WORLD size: 4,  My Rank : 3
