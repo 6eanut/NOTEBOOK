@@ -1,5 +1,7 @@
 # 25-Q2
 
+[05 QEMU Ubuntu(AMD64)](25-Q2/05_qemu_amd64_ubuntu.md)
+
 [04 GPU Parallel Computing](25-Q2/04_gpu_parallel_computing.md)
 
 [03 git Startup](25-Q2/03_git.md)
