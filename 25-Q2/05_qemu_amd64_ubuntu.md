@@ -28,9 +28,8 @@ cloud-localds my-seed.img user-data.yaml my-meta-data.yaml
 
 wget https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
 qemu-system-x86_64  \
-  -cpu host -machine type=q35,accel=kvm -m 2048 \
+  -cpu host -machine type=q35,accel=kvm -m 2048 -smp 2\
   -nographic \
-  -snapshot \
   -netdev id=net00,type=user,hostfwd=tcp::2222-:22 \
   -device virtio-net-pci,netdev=net00 \
   -drive if=virtio,format=qcow2,file=xenial-server-cloudimg-amd64-disk1 \
@@ -40,6 +39,7 @@ qemu-system-x86_64  \
 
 几点说明：
 
-* 进入qemu之后，用户名是 `ubuntu`，密码是 `password`；
+* 进入qemu之后，用户名是 `ubuntu`，密码是 `password`；·
 * ssh连接方式：`ssh -o "StrictHostKeyChecking no" ubuntu@0.0.0.0 -p 2222`;
 * 如果想要装其他版本，访问：[https://cloud-images.ubuntu.com](https://cloud-images.ubuntu.com)；
+* 默认情况下qemu的磁盘空间不大，可以通过 `qemu-img resize xenial-server-cloudimg-amd64-disk1.img +64G`来扩容，通过 `qemu-img info xenial-server-cloudimg-amd64-disk1.img`来查看；
