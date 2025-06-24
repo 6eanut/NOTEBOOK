@@ -60,6 +60,8 @@ OpenMP会让程序从主线程spawn程序员指定个数个线程，然后并行
 
 [A &#34;Hands-on&#34; Introduction to OpenMP](openmp/learn/Intro_To_OpenMP_Mattson.pdf)
 
+补充：[从汇编代码理解OpenMP](openmp/more/gcc-libgomp.md)
+
 ## 2 MPI
 
 **Message Passing Interface**

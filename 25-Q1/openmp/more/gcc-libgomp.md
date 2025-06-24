@@ -358,7 +358,7 @@ main._omp_fn.1:
 
 然后在main函数里面，会将这两个ompfn的地址作为参数传递给GOMP_parallel函数，该函数是libgomp运行时库的函数，第一个参数是并行函数的地址，第二个参数是传递给并行函数的参数，第三个参数是线程数，第四个参数是标志位用于控制并行行为。
 
-`通过https://gcc.gnu.org/git/gcc.git可以查看gcc源代码，找到libgomp目录，以及GOMP_parallel的定义
+通过https://gcc.gnu.org/git/gcc.git可以查看gcc源代码，找到libgomp目录，以及GOMP_parallel的定义
 
 ```c
 void GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads, unsigned int flags)
@@ -370,4 +370,4 @@ void GOMP_parallel (void (*fn) (void *), void *data, unsigned num_threads, unsig
 }
 ```
 
-gomp_team_start会调用pthread_create来创建线程`
+gomp_team_start会调用pthread_create来创建线程
