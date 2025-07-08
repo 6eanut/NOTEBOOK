@@ -8,3 +8,4 @@
 * 选择表：[新添系统调用对信息](syzdirect/02-ChoiceTable.md)
 * 小总结：[从三个数据结构来总结](syzdirect/04-check.md)
 * 系统调用对：[初始化及作用](syzdirect/05-CallPairMap.md)
+* 实验复现：[复现步骤](syzdirect/06-setup.md)
