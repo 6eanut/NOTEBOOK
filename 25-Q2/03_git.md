@@ -20,7 +20,7 @@ Host {username}
 ## 1 验证ssh可连接性
 
 ```shell
-ssh -T git@{username}
+ssh -vT git@{username}
 ```
 
 然后应该能看到 `Hi {username}!`的打印信息。
