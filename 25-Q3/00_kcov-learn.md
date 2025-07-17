@@ -96,7 +96,7 @@ int main(int argc, char **argv)
   `for (i = 0; i < n; i++) printf("0x%lx\n", cover[i + 1]);`
 * 清理资源
 
-在guest上执行该程序，会得到如下打印信息：
+在guest上执行该程序，会得到覆盖到的十六进制地址：
 
 ```shell
 0xffffffff81aad351
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 0xffffffff813bffd8
 ```
 
-在host上执行如下命令，解析上述信息到文件和行号：
+在host上执行如下命令，解析上述十六进制地址到具体的文件和行号：
 
 ```shell
 $ addr2line -e /home/syzdirect/linux/vmlinux \
@@ -154,3 +154,5 @@ $ addr2line -e /home/syzdirect/linux/vmlinux \
 Syzkaller在执行种子时，也是需要打开KCOV设备、初始化跟踪缓冲区、内存映射共享缓冲区、启用覆盖率收集，然后才去执行种子，最后再去读覆盖率数据。这是一个基本的执行流程。
 
 /sys/kernel/debug/kcov是一个接口文件，只能通过特定的ioctl操作与用户程序交互，不支持直接读写文件内容(cat echo等)。所以想要读取覆盖信息，必须通过open打开文件，通过ioctl和mmap操作收集覆盖率。
+
+KCOV是Linux内核提供的一个功能，可以知道某个系统调用在执行时覆盖了哪些代码路径，有助于内核模糊测试的进行。在使用时，需要一个host一个guest机器，用较新版本的GCC去编译打开了CONFIG_KCOV(用于收集覆盖信息)和CONFIG_DEBUG_INFO_DWARF4(用于addr2line)配置项的Linux内核，然后guest的操作系统指定为编译好的Linux，在guest中运行程序(包含使能kcov、执行系统调用、收集覆盖数据)，这样会得到覆盖到的十六进制地址数据，然后在host上，借助addr2line将地址转换成具体的文件名和行号。
