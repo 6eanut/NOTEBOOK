@@ -90,5 +90,9 @@ git add .
 git commit --amend  # 保持相同的提交信息，或修改它
 
 # 强制推送
-git push origin <branch-name> --force
+git push origin/<branch-name> --force
+
+# 此时，在另一台留有老commit的设备上git pull不能用了
+git fetch origin
+git reset --hard origin/<branch-name>
 ```
