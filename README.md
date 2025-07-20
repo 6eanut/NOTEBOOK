@@ -1,5 +1,7 @@
 # 25-Q3
 
+[01 gdb](25-Q3/01_gdb_startup.md)
+
 [00 KCOV](25-Q3/00_kcov-learn.md)
 
 # 25-Q2
