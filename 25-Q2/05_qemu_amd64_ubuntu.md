@@ -43,3 +43,9 @@ qemu-system-x86_64  \
 * ssh连接方式：`ssh -o "StrictHostKeyChecking no" ubuntu@0.0.0.0 -p 2222`;
 * 如果想要装其他版本，访问：[https://cloud-images.ubuntu.com](https://cloud-images.ubuntu.com)；
 * 默认情况下qemu的磁盘空间不大，可以通过 `qemu-img resize xenial-server-cloudimg-amd64-disk1.img +64G`来扩容，通过 `qemu-img info xenial-server-cloudimg-amd64-disk1.img`来查看；
+
+## host和qemu之间怎么传输文件？
+
+```
+scp -P portid -r username@localhost:/qemu_file /host_path
+```

@@ -96,3 +96,21 @@ git push origin/<branch-name> --force
 git fetch origin
 git reset --hard origin/<branch-name>
 ```
+
+## 7 只clone仓库中的指定路径下的文集
+
+```shell
+git clone --filter=blob:none --no-checkout https://gitee.com/peeanut/kernels_repo.git
+cd kernels_repo
+git sparse-checkout init --cone
+git sparse-checkout set kernel_v4.17 static_analysis/kernel_v4.17
+git checkout master  # 或你的目标分支（如 main）
+```
+
+## 8 源码编译安装git
+
+```shell
+# https://github.com/git/git/tags 去下载想要的版本的git源码
+make prefix=pathto/git-install all
+make prefix=pathto/git-install install
+```
