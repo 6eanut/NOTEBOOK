@@ -28,7 +28,7 @@
 
 [03 QEMU OpenEuler(RISC-V Aarch64)](25-Q1/03_qemu_openeuler.md)
 
-[02 Customizing Linux Kernel Modules](25-Q1/02_my_linux_module.md)
+[02 Customizing Linux Kernel](25-Q1/02_my_linux.md)
 
 [01 Syzkaller](25-Q1/01_Syzkaller.md)
 
