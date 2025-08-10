@@ -114,3 +114,12 @@ git checkout master  # 或你的目标分支（如 main）
 make prefix=pathto/git-install all
 make prefix=pathto/git-install install
 ```
+
+## 9 创建新分支
+
+```
+git checkout -b new_branch
+git add .
+git commit -m "message"
+git push -u origin new_branch
+```
