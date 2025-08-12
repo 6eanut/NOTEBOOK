@@ -142,3 +142,5 @@ docker save -o my_image.tar nginx:latest
 # 语法：docker load -i <文件名.tar>
 docker load -i my_image.tar
 ```
+
+附：[Docker/DockerHub 国内镜像源加速列表](https://zhuanlan.zhihu.com/p/24461370776)
