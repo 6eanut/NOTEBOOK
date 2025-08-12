@@ -66,6 +66,12 @@ make kvm_guest.config
 # CONFIG_KASAN_INLINE=y
 # CONFIG_CONFIGFS_FS=y
 # CONFIG_SECURITYFS=y
+# CONFIG_VETH=y
+# CONFIG_MACVLAN=y
+# CONFIG_IPVLAN=y
+# CONFIG_BONDING=y
+# CONFIG_VXLAN=y
+# CONFIG_GENEVE=y
 make olddefconfig
 make -j
 ```
