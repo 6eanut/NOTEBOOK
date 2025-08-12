@@ -72,6 +72,11 @@ make kvm_guest.config
 # CONFIG_BONDING=y
 # CONFIG_VXLAN=y
 # CONFIG_GENEVE=y
+# CONFIG_BPF=y
+# CONFIG_BPF_SYSCALL=y
+# CONFIG_BPF_JIT=y
+# CONFIG_HAVE_EBPF_JIT=y
+# CONFIG_BPF_EVENTS=y
 make olddefconfig
 make -j
 ```
