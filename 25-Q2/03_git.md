@@ -132,4 +132,10 @@ git checkout dev
 
 # 重命名当前分支为 dev-main (或其他名字)
 git branch -m dev-main
+
+# 推送新名称的分支到远程
+git push origin dev-main
+
+# 删除远程的旧分支
+git push origin --delete dev
 ```
