@@ -117,9 +117,19 @@ make prefix=pathto/git-install install
 
 ## 9 创建新分支
 
-```
+```shell
 git checkout -b new_branch
 git add .
 git commit -m "message"
 git push -u origin new_branch
+```
+
+## 10 给已有分支重命名
+
+```shell
+# 先切换到要重命名的 dev 分支
+git checkout dev
+
+# 重命名当前分支为 dev-main (或其他名字)
+git branch -m dev-main
 ```
