@@ -76,3 +76,117 @@ chmod +x start.sh
 ```
 
 还需要修改/etc/ssh/sshd_config，然后在host生成公密钥，把公钥添加到qemu的/root/.ssh/authorized_keys中，然后就可以[连接](qemu_openeuler/aarch64/ssh.sh)了。
+
+---
+
+# 20250820在X86_64上搭建QEMU RISC-V环境，Linux内核自己编译
+
+```shell
+**工作目录**
+mkdir riscv64-linux
+cd riscv64-linux
+
+**交叉工具链**
+wget https://mirror.iscas.ac.cn/riscv-toolchains/release/riscv-collab/riscv-gnu-toolchain/LatestRelease/riscv64-glibc-ubuntu-22.04-gcc-nightly-2025.05.30-nightly.tar.xz
+tar -xvf riscv64-glibc-ubuntu-22.04-gcc-nightly-2025.05.30-nightly.tar.xz
+--修改环境变量
+riscv64-unknown-linux-gnu-gcc -v
+
+**编译Linux内核**
+git clone --branch v6.16 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+cd linux
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- defconfig
+--打开以下配置项
+--注意CONFIG_KCOV_ENABLE_COMPARISONS 和 CONFIG_KASAN_INLINE没法开，否则qemu无法启动
+CONFIG_KCOV=y
+CONFIG_KCOV_INSTRUMENT_ALL=y
+CONFIG_DEBUG_FS=y
+CONFIG_DEBUG_KMEMLEAK=y
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_NAMESPACES=y
+CONFIG_UTS_NS=y
+CONFIG_IPC_NS=y
+CONFIG_PID_NS=y
+CONFIG_NET_NS=y
+CONFIG_CGROUP_PIDS=y
+CONFIG_MEMCG=y
+CONFIG_USER_NS=y
+# CONFIG_RANDOMIZE_BASE is not set
+CONFIG_KASAN=y
+CONFIG_FAULT_INJECTION=y
+CONFIG_FAULT_INJECTION_DEBUG_FS=y
+CONFIG_FAULT_INJECTION_USERCOPY=y
+CONFIG_FAILSLAB=y
+CONFIG_FAIL_PAGE_ALLOC=y
+CONFIG_FAIL_MAKE_REQUEST=y
+CONFIG_FAIL_IO_TIMEOUT=y
+CONFIG_FAIL_FUTEX=y
+CONFIG_LOCKDEP=y
+CONFIG_PROVE_LOCKING=y
+CONFIG_DEBUG_ATOMIC_SLEEP=y
+CONFIG_PROVE_RCU=y
+CONFIG_DEBUG_VM=y
+CONFIG_REFCOUNT_FULL=y
+CONFIG_FORTIFY_SOURCE=y
+CONFIG_HARDENED_USERCOPY=y
+CONFIG_LOCKUP_DETECTOR=y
+CONFIG_SOFTLOCKUP_DETECTOR=y
+CONFIG_HARDLOCKUP_DETECTOR=y
+CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+CONFIG_DETECT_HUNG_TASK=y
+CONFIG_WQ_WATCHDOG=y
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- olddefconfig
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- -j
+
+**OpenSBI**
+git clone https://github.com/riscv/opensbi
+cd opensbi
+make CROSS_COMPILE=riscv64-unknown-linux-gnu- PLATFORM_RISCV_XLEN=64 PLATFORM=generic
+
+**buildroot**
+wget https://buildroot.org/downloads/buildroot-2025.02.5.tar.gz
+tar -xvf buildroot-2025.02.5.tar.gz
+make qemu_riscv64_virt_defconfig
+make menuconfig
+--打开以下选项
+    Target packages
+	    Networking applications
+	        [*] iproute2
+	        [*] openssh
+    Filesystem images
+                ext2/3/4 variant - ext4
+	        exact size - 1g
+--关闭以下选项
+    Kernel
+	    Linux Kernel
+make
+--为output/target/etc/fstab文件添加下面这一行
+debugfs	/sys/kernel/debug	debugfs	defaults	0	0
+--为output/target/etc/ssh/sshd_config中替换下面几行
+PermitRootLogin yes
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+make
+
+**qemu启动**
+mkdir qemu
+cd qemu
+qemu-system-riscv64 \
+	-machine virt \
+	-nographic \
+	-bios /home/jiakai/riscv64-linux/opensbi/build/platform/generic/firmware/fw_jump.bin \
+	-kernel /home/jiakai/riscv64-linux/linux/arch/riscv/boot/Image \
+	-append "root=/dev/vda ro console=ttyS0" \
+	-object rng-random,filename=/dev/urandom,id=rng0 \
+	-device virtio-rng-device,rng=rng0 \
+	-drive file=/home/jiakai/riscv64-linux/buildroot-2025.02.5/output/images/rootfs.ext2,if=none,format=raw,id=hd0 \
+	-device virtio-blk-device,drive=hd0 \
+	-netdev user,id=net0,host=10.0.2.10,hostfwd=tcp::10022-:22 \
+	-device virtio-net-device,netdev=net0
+
+**syzkaller**
+sudo apt install gcc-riscv64-linux-gnu g++-riscv64-linux-gnu
+make TARGETOS=linux TARGETARCH=riscv64
+```
