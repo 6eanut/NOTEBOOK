@@ -55,7 +55,7 @@ deactivate
 
 ```
 # 装依赖包
-sudo apt install -y curl libssl-dev libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev libffi-dev tk-dev
+sudo apt install -y curl libssl-dev libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev libffi-dev tk-dev libncurses5-dev libncursesw5-dev
 sudo dnf install -y gcc make zlib-devel bzip2-devel openssl-devel libffi-devel readline-devel sqlite-devel xz-devel
 # 安装pyenv
 curl -fsSL https://pyenv.run | bash
