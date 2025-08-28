@@ -2,6 +2,13 @@
 
 ## 1 RISC-V
 
+## 1-0
+
+```
+# 这里需要提前装一些软件
+sudo apt install libglib2.0-dev libslirp-dev ninja-build
+```
+
 ### 1-1 下载QEMU源码
 
 ```
@@ -18,7 +25,7 @@ tar -xvf qemu-9.0.0.tar.xz
 mkdir ~/path
 mkdir ~/cache/qemu-9.0.0-build
 cd ~/cache/qemu-9.0.0-build
-../qemu-9.0.0/configure --target-list=riscv64-softmmu,riscv64-linux-user --prefix=/home/$(whoami)/path
+../qemu-9.0.0/configure --target-list=riscv64-softmmu,riscv64-linux-user --prefix=/home/$(whoami)/path --enable-slirp
 make -j $(nproc)
 make install
 export PATH="/home/$(whoami)/path/bin:$PATH"
@@ -45,6 +52,17 @@ chmod +x start_vm.sh
 ./start_vm.sh
 # root用户密码默认为openEuler12#$
 ssh -p 12055 root@localhost
+```
+
+### 1-5 一些设置
+
+```
+# 设置时间
+date -s "2020-07-15 23:00:01"
+dnf update
+dnf install -y ntpdate
+ntpdate pool.ntp.org
+timedatectl set-timezone Asia/Shanghai
 ```
 
 ## 2 Aarch64
