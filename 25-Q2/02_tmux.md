@@ -48,3 +48,9 @@ ctrl + b, c
 ```shell
 ctrl + b, 窗口编号
 ```
+
+## 7 给session起名字
+
+```shell
+tmux rename-session -t <old_name> <new_name>
+```
