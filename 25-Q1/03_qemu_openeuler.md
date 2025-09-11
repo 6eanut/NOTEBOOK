@@ -100,9 +100,25 @@ chmod +x start.sh
 # 20250820在X86_64上搭建QEMU RISC-V环境，Linux内核自己编译
 
 ```shell
+要求ubuntu>=22.04
 **工作目录**
 mkdir riscv64-linux
 cd riscv64-linux
+
+**qemu**
+cd ~
+mkdir cache
+cd ~/cache
+wget -c https://download.qemu.org/qemu-9.2.0.tar.xz
+tar -xvf qemu-9.2.0.tar.xz
+mkdir ~/path
+mkdir ~/cache/qemu-9.2.0-build
+cd ~/cache/qemu-9.2.0-build
+../qemu-9.2.0/configure --prefix=/home/$(whoami)/path --enable-virtfs --target-list=riscv64-linux-user,riscv64-softmmu --enable-malloc=system --enable-slirp
+--enable-kvm可选
+make -j $(nproc)
+make install
+export PATH="/home/$(whoami)/path/bin:$PATH"
 
 **交叉工具链**
 wget https://mirror.iscas.ac.cn/riscv-toolchains/release/riscv-collab/riscv-gnu-toolchain/LatestRelease/riscv64-glibc-ubuntu-22.04-gcc-nightly-2025.05.30-nightly.tar.xz
