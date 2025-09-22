@@ -8,13 +8,13 @@ benchmark的终端还是显示未终止，但是top查看进程会发现已经�
 
 原命令如下：
 
-```
+```shell
 python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --python_path=models --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
 ```
 
 限制CPU后的命令如下：
 
-```
+```shell
 taskset -c 0-9 python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --python_path=models --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
 ```
 
@@ -24,9 +24,23 @@ taskset -c 0-9 python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benc
 
 限制内存后的命令如下：
 
-```
+```shell
 ulimit -v 10000000 && python3 /home/6eanut/tensorflow-test/benchmarks/perfzero/lib/benchmark.py --git_repos="https://github.com/tensorflow/models.git;benchmark" --python_path=models --gcloud_key_file_url="" --benchmark_methods=official.benchmark.resnet_ctl_imagenet_benchmark.Resnet50CtlBenchmarkSynth.benchmark_1_gpu
 ```
+
+### 1-3 systemd-run
+
+用法如下：
+
+```shell
+systemd-run --scope -p CPUQuota=200% -p MemoryMax=500M your_command
+```
+
+systemd-run是利用内核cgroups v2功能，精准地控制一个命令及其所有子进程的资源，并且在命令结束后会自动清理。
+
+* --scope：使命令在台前运行，并将其输出打印到当前终端，就像普通命令一样，如果不加，它会像一个后台服务一样运行。
+* CPUQuota：设置CPU配额，也可以设置为200%来表示最多使用两个完整的CPU核心。
+* MemoryMax：设置内存的硬限制，一旦超过，进程可能会被OOM Killer杀掉。
 
 ---
 
