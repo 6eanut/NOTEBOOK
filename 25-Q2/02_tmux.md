@@ -54,3 +54,36 @@ ctrl + b, 窗口编号
 ```shell
 tmux rename-session -t <old_name> <new_name>
 ```
+
+## 8 在session内创建pane
+
+```shell
+# 水平分割
+ctrl + b, "
+# 垂直分割
+ctrl + b, %
+# 按顺序切换到下一个pane
+ctrl + b, o
+# 方向键切换pane
+ctrl + b, 方向键
+# 按编号切换pane
+ctrl + b, q
+```
+
+## 9 tmux配置文件
+
+```shell
+# 修改.tmux.conf文件
+set -g default-terminal "screen-256color"
+set-option -g mouse on
+set-option -g renumber-windows on
+
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-pain-control'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-yank'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+```
