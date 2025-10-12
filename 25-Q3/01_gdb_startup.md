@@ -46,4 +46,7 @@ pgrep -af qemu-system-x86_64
 sudo gdb -p pid
 # qemu是多线程启动，获取所有现成的backtrace
 thread apply all bt
+
+# 或者直接在gdb中运行qemu
+sudo gdb --args qemu-system-x86_64 ...
 ```
