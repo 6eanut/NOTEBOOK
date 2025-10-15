@@ -6,7 +6,7 @@ venv:**V**irtual **ENV**ironment
 
 python -m venv /home/venv/venv-test
 
-```
+```shell
 [venv@jiakai-openeuler-01 venv-test]$ ls
 bin  include  lib  lib64  pyvenv.cfg
 [venv@jiakai-openeuler-01 venv-test]$ pwd
@@ -18,7 +18,7 @@ bin  include  lib  lib64  pyvenv.cfg
 
 source /home/venv/venv-test/bin/activate
 
-```
+```shell
 [venv@jiakai-openeuler-01 ~]$ source /home/venv/venv-test/bin/activate
 (venv-test) [venv@jiakai-openeuler-01 ~]$
 ```
@@ -27,7 +27,7 @@ source /home/venv/venv-test/bin/activate
 
 deactivate
 
-```
+```shell
 (venv-test) [venv@jiakai-openeuler-01 ~]$ deactivate
 [venv@jiakai-openeuler-01 ~]$
 
@@ -53,7 +53,7 @@ deactivate
 
 ## 安装
 
-```
+```shell
 # 装依赖包
 sudo apt install -y curl libssl-dev libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev libffi-dev tk-dev libncurses5-dev libncursesw5-dev
 sudo dnf install -y gcc make zlib-devel bzip2-devel openssl-devel libffi-devel readline-devel sqlite-devel xz-devel
@@ -67,7 +67,7 @@ eval "$(pyenv init -)"
 
 ## 使用
 
-```
+```shell
 # 查看当前系统安装的python版本有哪些
 pyenv versions
 # 安装某一版本的python
@@ -83,3 +83,19 @@ pyenv local 3.x.x
 ## 感想
 
 pyenv是一个很强大的工具，它甚至提供在不同的工作目录下使用不同python版本的功能。
+
+# 如何管理本地的python2和python3(20251015)
+
+这里借助update-alternatives工具来实现：
+
+```shell
+# 查看当前可用的python
+update-alternatives --list python
+
+# 配置
+update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2
+
+# 选择当前python指定的版本
+update-alternatives --config python
+```

@@ -1,5 +1,7 @@
 # 25-Q3
 
+[03 record and replay in qemu](25-Q3/03_qemu_rr.md)
+
 [02 Build RISC-V64 Linux using X86 clang compilation](25-Q3/02_clang_learn.md)
 
 [01 gdb](25-Q3/01_gdb_startup.md)
