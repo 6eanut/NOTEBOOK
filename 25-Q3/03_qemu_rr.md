@@ -69,7 +69,6 @@ gdb ./vmlinux
 
 VM现在会开始回放，直到触发panic函数时暂停，此时可以在GDB中检查调用栈、变量、寄存器等信息。
 
-
 使用record和replay有以下问题：
 
 * kvm和record相矛盾，所以启用record时，kvm必须关闭，这会导致运行速度变慢；
