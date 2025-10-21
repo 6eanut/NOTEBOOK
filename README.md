@@ -1,5 +1,7 @@
 # 25-Q4
 
+[01 strings](25-Q4/01_strings.md)
+
 [00 Triton startup](25-Q4/00_triton_startup.md)
 
 # 25-Q3
