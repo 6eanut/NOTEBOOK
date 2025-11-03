@@ -87,3 +87,13 @@ set -g @plugin 'tmux-plugins/tmux-yank'
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
 ```
+
+## 10 显示CPU/Memory利用率
+
+```shell
+# 可以用htop/top来看，但是那不方便，可以把这个功能嵌入到tmux里面
+sudo apt install sysstat
+# 在.tmux.conf里面加上
+set -g status-interval 2
+set -g status-right "#[fg=green]CPU: #(mpstat 1 1 | awk '/Average:/ {printf \"%d%%\", 100-$13}') #[fg=cyan]| MEM: #(free -h | awk '/Mem:/ {print $3 \"/\" $2}') #[fg=yellow]| %H:%M "
+```
