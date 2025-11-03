@@ -114,6 +114,10 @@ tar -cf - dir/ | pixz -p 8 > dir.tar.xz
 unxz file.xz  # 或使用等效命令：xz -d file.xz
 # 解包
 tar -xvf dir.tar	# 或直接合二为一：tar -xvJf dir.tar.xz
+
+# 同样的，解压也可以多线程
+sudo apt install pxz
+tar -I pxz -xvf file.tar.xz
 ```
 
 例如：
