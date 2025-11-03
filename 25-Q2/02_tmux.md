@@ -92,8 +92,6 @@ run '~/.tmux/plugins/tpm/tpm'
 
 ```shell
 # 可以用htop/top来看，但是那不方便，可以把这个功能嵌入到tmux里面
-sudo apt install sysstat
-# 在.tmux.conf里面加上
 set -g status-interval 2
-set -g status-right "#[fg=green]CPU: #(mpstat 1 1 | awk '/Average:/ {printf \"%d%%\", 100-$13}') #[fg=cyan]| MEM: #(free -h | awk '/Mem:/ {print $3 \"/\" $2}') #[fg=yellow]| %H:%M "
+set -g status-right "#[fg=green]CPU: #(bash -c 'read a b c d e f g h i j < /proc/stat; sleep 0.3; read a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 < /proc/stat; idle=$((d+e)); idle2=$((d2+e2)); total=$((b+c+d+e+f+g+h+i)); total2=$((b2+c2+d2+e2+f2+g2+h2+i2)); echo $(( (100*( (total2-total)-(idle2-idle) )) / (total2-total) ))%') #[fg=cyan]| MEM: #(free -h | awk '/Mem:/ {print $3 \"/\" $2}') #[fg=yellow]| %H:%M "
 ```
