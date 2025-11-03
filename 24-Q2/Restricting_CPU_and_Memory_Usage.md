@@ -100,6 +100,15 @@ xz -9 -T0 -v file  # -9:最高压缩比 -T0:多线程 -v:显示进度
 # 如果是某个文件夹所占空间比较多，可以先对该文件夹打包，而后再压缩
 tar -cvf dir.tar dir/
 xz -9 -T0 -v dir.tar	# 或者直接合二为一：tar -cvJf dir.tar.xz dir/
+# 关于选项的解释
+-c	create，新建一个 tar 包
+-v	verbose，显示详细过程	dir/file1.txt
+-J	使用 xz 压缩算法
+-f	指定输出文件名	dir.tar.xz
+
+# 上面这个方法是单线程，太慢了...
+sudo apt install pixz
+tar -cf - dir/ | pixz -p 8 > dir.tar.xz
 
 # 解压缩
 unxz file.xz  # 或使用等效命令：xz -d file.xz
