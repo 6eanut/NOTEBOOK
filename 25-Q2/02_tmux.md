@@ -95,3 +95,10 @@ run '~/.tmux/plugins/tpm/tpm'
 set -g status-interval 2
 set -g status-right "#[fg=green]CPU: #(bash -c 'read a b c d e f g h i j < /proc/stat; sleep 0.3; read a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 < /proc/stat; idle=$((d+e)); idle2=$((d2+e2)); total=$((b+c+d+e+f+g+h+i)); total2=$((b2+c2+d2+e2+f2+g2+h2+i2)); echo $(( (100*( (total2-total)-(idle2-idle) )) / (total2-total) ))%') #[fg=cyan]| MEM: #(free -h | awk '/Mem:/ {print $3 \"/\" $2}') #[fg=yellow]| %H:%M "
 ```
+
+## 11 pane的同步
+
+```shell
+ctrl + b, :set synchronize-panes
+ctrl + b, :set synchronize-panes off
+```
