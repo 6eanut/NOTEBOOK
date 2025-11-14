@@ -139,3 +139,10 @@ git push origin dev-main
 # 删除远程的旧分支
 git push origin --delete dev
 ```
+
+## 11 查看历史commit修改内容
+
+```shell
+git log
+git show commit_id
+```
