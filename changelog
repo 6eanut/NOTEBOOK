@@ -1,5 +1,7 @@
 2025-11-17
     GPGPU-SIM startup : fix
+    Linux startup
+    git : git generates patch, used to send email to linux community
 
 2025-11-16
     GPGPU-SIM startup

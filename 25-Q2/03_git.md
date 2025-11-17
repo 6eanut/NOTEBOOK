@@ -146,3 +146,25 @@ git push origin --delete dev
 git log
 git show commit_id
 ```
+
+## 12 git email
+
+```shell
+# 拉源码
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+cd linux
+
+# 配个人信息
+git config --local user.name "Your Name"
+git config --local user.email "your_email@example.com"
+
+# 对源码做修改并且附上相关信息(第一行为标题，之后需要空一行)
+vim drivers/.../xxx.c
+git add drivers/.../xxx.c
+git commit -s
+git commit --amend
+
+# 生成补丁
+git format-patch -1
+./scripts/checkpatch.pl 0001-fix-driver-comment.patch
+```
