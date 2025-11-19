@@ -1,8 +1,10 @@
 # 25-Q4
 
+[06 Contribute to the Linux Community](25-Q4/06_contribute_to_the_linux.md)
+
 [05 Linux Startup](https://6eanut.github.io/linux-startup/)
 
-[04 GPU Emulator](25-Q4/03_gpu_emulator.md)
+[04 GPU Emulator](25-Q4/04_gpu_emulator.md)
 
 [03 datenlord talk : From Triton Kernel to AMDGCN: In-depth Parsing of Thread Behavior](https://github.com/6eanut/datenlord_talk_1102/blob/main/docs/从%20Triton%20Kernel%20到%20AMDGCN：深入线程行为解析.pdf)
 
