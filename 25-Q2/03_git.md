@@ -1,5 +1,18 @@
 # git Startup
 
+```txt
+# 设置本地仓库url
+git remote set-url origin url
+# 更新远程仓库信息到本地
+git fetch origin
+# 查看当前仓库位于哪个commit
+git rev-parse HEAD
+# 查看两个commit间的差异
+git diff commit1..commit2 > update.patch
+```
+
+---
+
 如果一个人有多个github账号，在本地会对不同账号下的不同仓做修改并commit和push，本地机该如何做配置？本篇演示环境为Windows 11。
 
 ## 0 为新账号生成新的ssh公密钥
@@ -72,7 +85,7 @@ git push -f
 
 ## 5 联系maintainer
 
-当社区内的资料不够多，并且其他网站的材料也没多少时，邮件联系maintainer是个不错的方法，有时人们并不会把自己的联系邮件放荡profile里面，但是git提供了很好的帮助，我们能找到做出commit最多的几个用户。
+当社区内的资料不够多，并且其他网站的材料也没多少时，邮件联系maintainer是个不错的方法，有时人们并不会把自己的联系邮件放在profile里面，但是git提供了很好的帮助，我们能找到做出commit最多的几个用户。
 
 ```shell
 git log --pretty="%ae" | sort | uniq -c | sort -nr | head -6
@@ -97,7 +110,7 @@ git fetch origin
 git reset --hard origin/<branch-name>
 ```
 
-## 7 只clone仓库中的指定路径下的文集
+## 7 只clone仓库中的指定路径下的文件
 
 ```shell
 git clone --filter=blob:none --no-checkout https://gitee.com/peeanut/kernels_repo.git
