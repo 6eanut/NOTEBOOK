@@ -1,5 +1,6 @@
-
 # GPU Emulator
+
+[公众号链接](https://mp.weixin.qq.com/s/znazVk1izwz5i7OIQuaswA?scene=1)
 
 在深度学习、科学计算、高性能计算等领域飞速发展的今天，GPU编程已成为实现高效并行计算的关键。开发者通过CUDA、PyTorch等工具编写kernel，但商业GPU的闭源特性，让kernel的实际执行过程难以观测，架构创新也面临诸多限制。GPU模拟器的出现，为这些问题提供了解决方案。
 
