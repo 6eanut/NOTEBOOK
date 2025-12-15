@@ -1,5 +1,7 @@
 # 25-Q4
 
+[07 Interpreter Mode in Triton](25-Q4/07_interpreter_mode_in_triton.md)
+
 [06 Contribute to the Linux Community](25-Q4/06_contribute_to_the_linux.md)
 
 [05 Linux Startup](https://6eanut.github.io/linux-startup/)
