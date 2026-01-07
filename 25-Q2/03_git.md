@@ -181,3 +181,20 @@ git commit --amend
 git format-patch -1
 ./scripts/checkpatch.pl 0001-fix-driver-comment.patch
 ```
+
+## 13 删除已经提交到线上仓库的commit
+
+```shell
+# 回退到倒数第3个 commit（即撤销最近的2个）
+git reset --hard HEAD~2
+git push origin <分支名> --force
+```
+
+## 14 同步社区主仓库到本地fork仓库
+
+```shell
+# 将 6098a8e (你的修改) 直接接到 15f6fd0 (官方最新提交) 之上
+git rebase --onto 15f6fd0844 86fe55eb76 kvm_riscv
+现在有三个commit号，commit1表示你fork社区主仓库时的commit，commit2表示你在commit1的基础上添加自己修改后的commit，commit3表示社区主仓库从commit1更新到commit3的commit
+git rebase --onto commit3 commit1 <q分支名>
+```
