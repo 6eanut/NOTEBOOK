@@ -198,3 +198,10 @@ git rebase --onto 15f6fd0844 86fe55eb76 kvm_riscv
 现在有三个commit号，commit1表示你fork社区主仓库时的commit，commit2表示你在commit1的基础上添加自己修改后的commit，commit3表示社区主仓库从commit1更新到commit3的commit
 git rebase --onto commit3 commit1 <q分支名>
 ```
+
+## 15 查看修改
+
+```shell
+# 对于git status得到的修改，想要查看单个文件做了哪些修改
+git diff file.c
+```
