@@ -197,6 +197,13 @@ git push origin <分支名> --force
 git rebase --onto 15f6fd0844 86fe55eb76 kvm_riscv
 现在有三个commit号，commit1表示你fork社区主仓库时的commit，commit2表示你在commit1的基础上添加自己修改后的commit，commit3表示社区主仓库从commit1更新到commit3的commit
 git rebase --onto commit3 commit1 <q分支名>
+
+-----------------------------------------------------------
+
+# 这么做会让你把基于老commit做的本地修改应用到基于新commit做的修改
+git remote add upstream https://github.com/google/syzkaller.git
+git fetch upstream
+git rebase upstream/master
 ```
 
 ## 15 查看修改
