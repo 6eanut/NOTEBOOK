@@ -212,3 +212,11 @@ git rebase upstream/master
 # 对于git status得到的修改，想要查看单个文件做了哪些修改
 git diff file.c
 ```
+
+## 16 查看远程仓库有哪些分支并且删除远程仓库的分支
+
+```shell
+git branch -r
+
+git push origin --delete branch_name
+```
