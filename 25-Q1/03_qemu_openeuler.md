@@ -123,6 +123,8 @@ export PATH="/home/$(whoami)/path/bin:$PATH"
 **交叉工具链**
 wget https://mirror.iscas.ac.cn/riscv-toolchains/release/riscv-collab/riscv-gnu-toolchain/LatestRelease/riscv64-glibc-ubuntu-22.04-gcc-nightly-2025.05.30-nightly.tar.xz
 tar -xvf riscv64-glibc-ubuntu-22.04-gcc-nightly-2025.05.30-nightly.tar.xz
+export CXXFLAGS="--sysroot=/home/jiakai/rvfuzz-ci/tools/riscv/sysroot $CXXFLAGS"
+export CFLAGS="--sysroot=/home/jiakai/rvfuzz-ci/tools/riscv/sysroot $CFLAGS"
 --修改环境变量
 riscv64-unknown-linux-gnu-gcc -v
 
