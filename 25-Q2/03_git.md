@@ -220,3 +220,21 @@ git branch -r
 
 git push origin --delete branch_name
 ```
+
+## 17 查看某一行的修改记录以及commit信息
+
+```shell
+$ git blame -L 193,193 arch/riscv/kvm/vcpu_exit.c
+9f7013265112a (Anup Patel 2021-09-27 17:10:06 +0530 193)        if (trap->scause & CAUSE_IRQ_FLAG)
+$ git show 9f7013265112a
+```
+
+## 18 本地master强制对齐到upstream/master
+
+```shell
+git remote add upstream https://github.com/google/syzkaller.git
+git fetch upstream
+git checkout master
+git reset --hard upstream/master
+git push -f
+```
