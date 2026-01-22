@@ -238,3 +238,9 @@ git checkout master
 git reset --hard upstream/master
 git push -f
 ```
+
+## 19 丢弃未commit的改动
+
+```shell
+git restore .
+```
