@@ -1,3 +1,7 @@
+# 26-Q1
+
+[00 The Journey of a PyTorch Code Line: From Python to Hardware Execution](26-Q1/00_pytorch2device.md)
+
 # 25-Q4
 
 [07 Interpreter Mode in Triton](25-Q4/07_interpreter_mode_in_triton.md)
