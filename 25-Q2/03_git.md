@@ -244,3 +244,9 @@ git push -f
 ```shell
 git restore .
 ```
+
+## 20 修复上一个commit的message
+
+```shell
+git commit --amend
+```
