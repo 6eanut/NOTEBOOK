@@ -250,3 +250,14 @@ git restore .
 ```shell
 git commit --amend
 ```
+
+## 21 撤销本地的commit
+
+```shell
+# 彻底删除
+git reset --hard HEAD~1
+# 回到git commit操作之前
+git reset --soft HEAD~1
+# 回到git add操作之前
+git reset --mixed HEAD~1
+```

@@ -1,3 +1,6 @@
+2026-01-27
+    git reset --hard/soft/mixed
+
 2026-01-26
     git commit --amend
 
