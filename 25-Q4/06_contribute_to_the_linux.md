@@ -26,6 +26,8 @@ git checkout -b local-fix-test_kprobes
 git commit -s
 # 此时需要写上标题、修改的原因以及修改的内容
 git format-patch -1
+# patch series可以加上cover
+git format-patch -3 --cover-letter
 ```
 
 如果这是你的v3版patch，那么可能需要进入到patch文件里面去做修改，记录这一版相较于前一版做了哪些修改，比如：

@@ -1,3 +1,7 @@
+2026-02-25
+    git : rebase --continue
+    linux : cover
+
 2026-01-27
     git reset --hard/soft/mixed
 

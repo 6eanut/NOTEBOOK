@@ -261,3 +261,15 @@ git reset --soft HEAD~1
 # 回到git add操作之前
 git reset --mixed HEAD~1
 ```
+
+## 22 patch系列怎么修改其中某一个
+
+```shell
+# 假如一个patch series有三个patch，reviewer建议对第二个patch做修改，此时怎么办？
+git rebase -i HEAD~3
+# 然后把第二个patch的pick改为edit
+# 然后在本地修改代码
+git add xxx.file
+git commit --amend
+git rebase --continue
+```
