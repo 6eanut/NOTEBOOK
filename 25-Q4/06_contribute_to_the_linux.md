@@ -115,6 +115,11 @@ git send-email \
   --cc "Randy Dunlap <rdunlap@infradead.org>"
 ```
 
----
+## 3 拉取patch
 
-很多邮件方面的沟通模式还需要多学习，后面会进行更新。
+```shell
+sudo apt install b4
+# 查看patch的message id
+b4 am message id
+git am xxx.mbx
+```
