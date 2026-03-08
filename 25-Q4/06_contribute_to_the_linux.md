@@ -28,6 +28,8 @@ git commit -s
 git format-patch -1
 # patch series可以加上cover
 git format-patch -3 --cover-letter
+# patch 可以加上version
+git format-patch -v2 -3
 ```
 
 如果这是你的v3版patch，那么可能需要进入到patch文件里面去做修改，记录这一版相较于前一版做了哪些修改，比如：
