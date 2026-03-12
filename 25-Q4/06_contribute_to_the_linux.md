@@ -125,3 +125,7 @@ sudo apt install b4
 b4 am message id
 git am xxx.mbx
 ```
+
+tips:
+
+* patch中涉及拿不准的缩进时，一定要先发送给自己看看(此时如果已经有了reviewed-by，需要加--suppress-cc=all)
