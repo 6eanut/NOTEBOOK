@@ -117,6 +117,19 @@ git send-email \
   --cc "Randy Dunlap <rdunlap@infradead.org>"
 ```
 
+iscas的邮箱设置如下：
+
+```shell
+git config --local user.email "xujiakai2025@iscas.ac.cn"
+git config --local user.name "Jiakai Xu"
+git config --local sendemail.smtpserver mail.cstnet.cn
+git config --local sendemail.smtpuser "xujiakai2025@iscas.ac.cn"
+git config --local sendemail.smtpserverport 465
+git config --local sendemail.smtpencryption ssl
+git config --local sendemail.smtppass "xxxx yyyy zzzz nnnn"
+# https://help.cstnet.cn/redianwenti/zhuanyongmima.html
+```
+
 ## 3 拉取patch
 
 ```shell
