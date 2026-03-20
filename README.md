@@ -1,5 +1,7 @@
 # 26-Q1
 
+[02 RISC and CISC](26-Q1/02_risc&cisc.md)
+
 [01 ffs and fls](26-Q1/01_ffs&fls.md)
 
 [00 The Journey of a PyTorch Code Line: From Python to Hardware Execution](26-Q1/00_pytorch2device.md)
