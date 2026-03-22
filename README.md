@@ -1,5 +1,7 @@
 # 26-Q1
 
+[03 Integrating a Custom Backend into PyTorch](26-Q1/03_pytorch_backend.md)
+
 [02 RISC and CISC](26-Q1/02_risc&cisc.md)
 
 [01 ffs and fls](26-Q1/01_ffs&fls.md)
