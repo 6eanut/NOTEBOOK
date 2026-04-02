@@ -55,7 +55,7 @@ sudo umount mnt
 
 注意，在前面的启动命令里有init=/bin/bash，这是因为测试时ttys0一直过不去，所以选择这个方法绕过去。
 
-如果绕过去的话，进去是需要手动开ssh服务的，然后就可以ssh/scp了。
+如果绕过去的话，进去是需要手动开ssh服务的，然后就可以ssh/scp了：
 
 ```
 ip addr add 10.0.2.15/24 dev eth0
@@ -64,4 +64,14 @@ mkdir -p /run/sshd
 /usr/sbin/sshd
 ssh-keygen -A
 /usr/sbin/sshd
+```
+
+网络这么配：
+
+```
+ip link set eth0 up
+ip addr add 10.0.2.15/24 dev eth0
+ip route add default via 10.0.2.2
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+ping -c 3 8.8.8.8
 ```
