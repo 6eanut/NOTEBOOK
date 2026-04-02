@@ -1,5 +1,7 @@
 # 26-Q1
 
+[04 RISCV and APT](26-Q1/04_riscv&apt.md)
+
 [03 Integrating a Custom Backend into PyTorch](26-Q1/03_pytorch_backend.md)
 
 [02 RISC and CISC](26-Q1/02_risc&cisc.md)
