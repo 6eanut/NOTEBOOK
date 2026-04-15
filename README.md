@@ -1,5 +1,7 @@
 # 26-Q2
 
+[02 Claude Code Startup](26-Q2/02_claude.md)
+
 [01 gh Startup](26-Q2/01_gh.md)
 
 [00 OpenClaw Startup](26-Q2/00_openclaw.md)
