@@ -7,17 +7,27 @@ uv tool install 'litellm[proxy]'
 curl -fsSL https://claude.ai/install.sh | bash
 
 # write config.yaml
+litellm_settings:
+   drop_params: true
+
 model_list:
 - model_name: DeepSeek-V3.2
   litellm_params:
-    model: openai/DeepSeek-V3.2
+    model: modelstudio/DeepSeek-V3.2
     api_key: key
     api_base: "url"
 - model_name: GLM-5-Turbo
   litellm_params:
-    model: openai/GLM-5-Turbo
+    model: modelstudio/GLM-5-Turbo
     api_key: key
     api_base: "url"
+
+# write  ~/.local/lib/python3.10/site-packages/litellm/llms/openai_like/providers.json
+  "modelstudio": {
+    "base_url": "url",
+    "api_key_env": "key",
+    "supported_endpoints": ["/v1/chat/completions"]
+  }
 
 export LITELLM_MASTER_KEY="sk-1234567890"
 
