@@ -37,3 +37,18 @@ export ANTHROPIC_AUTH_TOKEN="$LITELLM_MASTER_KEY"
 
 claude --model DeepSeek-V3.2
 ```
+
+## 附：
+
+claude code的安装需要科学上网，服务器没法科学上网咋办？只要本地笔记本可以就行
+
+```
+# on desktop
+ssh -R 17890:127.0.0.1:7890 youruser@your-server
+
+# on server
+export http_proxy=http://127.0.0.1:17890
+export https_proxy=http://127.0.0.1:17890
+
+curl -I https://claude.ai/install.sh
+```
