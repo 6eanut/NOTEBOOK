@@ -273,3 +273,28 @@ git add xxx.file
 git commit --amend
 git rebase --continue
 ```
+
+## 23 怎么打tag
+
+```
+git tag -a v0.0.1 -m "$(cat <<'EOF'
+Release v0.0.1 - Initial release of BSV Language Server
+
+This is the first official release of the BSV Language Server, providing
+Bluespec SystemVerilog language support for VS Code.
+
+Installation:
+- Download the .vsix file below
+- Open VS Code
+- Go to Extensions view (Ctrl+Shift+X)
+- Click "..." menu and select "Install from VSIX..."
+- Select the downloaded file
+
+This release marks the beginning of official BSV tooling support.
+Contributions and feedback are welcome!
+ 
+EOF
+)"
+
+git push origin v0.0.1
+```
