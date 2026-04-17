@@ -10,9 +10,18 @@ completion_response = await litellm.acompletion(**completion_kwargs)
 成为
 completion_kwargs.pop("output_config", None)
 completion_response = await litellm.acompletion(**completion_kwargs)
+
+如果遇到：
+litellm.proxy.route_llm_request.ProxyModelNotFoundError: 400: {'error': 'anthropic_messages: Invalid model name passed in model=claude-haiku-4-5-20251001. Call `/v1/models` to view available models for your key.'}
+向config.yaml里面添加：
+- model_name: claude-haiku-4-5-20251001
+  litellm_params:
+    model: modelstudio/DeepSeek-V3.2
+    api_key: key
+    api_base: "url"
 ```
 
-## completion_response = await litellm.acompletion(**completion_kwargs)使用技巧
+## 使用技巧
 
 ```
 # 在Claude正在干活的时候插一个问题进去，但这个问题不会被加入对话历史。
