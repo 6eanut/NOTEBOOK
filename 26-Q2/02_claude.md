@@ -1,6 +1,18 @@
 # Claude Code Startup
 
-## 使用技巧
+## debug
+
+```
+如果遇到：
+litellm.exceptions.APIConnectionError: litellm.APIConnectionError: ModelstudioException - AsyncCompletions.create() got an unexpected keyword argument 'output_config'. Received Model Group=Qwen3.5-397B-A17B
+修改experimental_pass_through/adapters/handler.py里面的：
+completion_response = await litellm.acompletion(**completion_kwargs)
+成为
+completion_kwargs.pop("output_config", None)
+completion_response = await litellm.acompletion(**completion_kwargs)
+```
+
+## completion_response = await litellm.acompletion(**completion_kwargs)使用技巧
 
 ```
 # 在Claude正在干活的时候插一个问题进去，但这个问题不会被加入对话历史。
