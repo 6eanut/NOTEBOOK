@@ -1,5 +1,7 @@
 # 26-Q2
 
+[03 Hermes Startup](26-Q2/03_hermes.md)
+
 [02 Claude Code Startup](26-Q2/02_claude.md)
 
 [01 gh Startup](26-Q2/01_gh.md)
