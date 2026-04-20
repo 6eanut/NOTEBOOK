@@ -52,6 +52,9 @@ litellm.proxy.route_llm_request.ProxyModelNotFoundError: 400: {'error': 'anthrop
 
 # 当前的整段对话就会被导出成一个Markdown文件
 /export
+
+# 输入框内想要换行怎么办
+先输入 \，再按 Enter
 ```
 
 ## 环境配置
