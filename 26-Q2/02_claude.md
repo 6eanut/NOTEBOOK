@@ -121,3 +121,58 @@ export https_proxy=http://127.0.0.1:17890
 
 curl -I https://claude.ai/install.sh
 ```
+
+claude code会一直询问yes，很烦，修改文件：~/.claude/settings.local.json 或 project/.claude/settings.local.json
+
+```
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Edit(*)",
+      "Write(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Skill(*)",
+      "Agent(*)",
+      "TodoWrite(*)",
+      "NotebookEdit(*)",
+      "mcp__playwright__*",
+      "mcp__gemini__*",
+      "mcp__codex__*",
+      "mcp__tavily__*"
+    ],
+    "deny":[
+            "Bash(rm -rf /)",
+            "Bash(rm -rf /*)",
+            "Bash(rm -rf ~)",
+            "Bash(rm -rf ~/*)",
+            "Bash(rm -rf $HOME*)",
+            "Bash(sudo rm *)",
+            "Bash(sudo rm -rf*)",
+            "Bash(dd *)",
+            "Bash(mkfs*)",
+            "Bash(chmod -R 777 /*)",
+            "Bash(chmod -R 000 /*)",
+            "Bash(chown -R *)",
+            "Bash(shutdown*)",
+            "Bash(reboot*)",
+            "Bash(killall *)",
+            "Read(~/.ssh/**)",
+            "Edit(~/.ssh/**)",
+            "Write(~/.ssh/**)",
+            "Bash(cat ~/.ssh/*)",
+            "Bash(curl * | sh*)",
+            "Bash(curl * | bash*)",
+            "Bash(wget * | sh*)",
+            "Bash(git push --force*)",
+            "Bash(git push -f *)",
+            "Bash(git push origin main --force*)",
+            "Bash(git push origin master --force*)"
+    ]
+  }
+}
+```
