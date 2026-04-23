@@ -1,5 +1,13 @@
 # Claude Code Startup
 
+## skills
+
+```
+# https://claudemarketplaces.com/skills
+npx skills add https://github.com/anthropics/skills --skill pptx
+npx skills add https://github.com/github/awesome-copilot --skill gh-cli
+```
+
 ## debug
 
 ```
