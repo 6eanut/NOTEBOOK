@@ -1,5 +1,7 @@
 # 26-Q2
 
+[04 bluespec-lsp](26-Q2/04_bsvlsp.md)
+
 [03 Hermes Startup](26-Q2/03_hermes.md)
 
 [02 Claude Code Startup](26-Q2/02_claude.md)
