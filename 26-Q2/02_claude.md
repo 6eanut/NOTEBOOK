@@ -6,6 +6,15 @@
 # https://claudemarketplaces.com/skills
 npx skills add https://github.com/anthropics/skills --skill pptx
 npx skills add https://github.com/github/awesome-copilot --skill gh-cli
+
+# ecc
+https://github.com/affaan-m/everything-claude-code/blob/main/README.zh-CN.md
+
+# claude hud
+/plugin marketplace add jarrodwatts/claude-hud
+/plugin install claude-hud
+/reload-plugins
+/claude-hud:setup
 ```
 
 ## debug
@@ -29,7 +38,7 @@ litellm.proxy.route_llm_request.ProxyModelNotFoundError: 400: {'error': 'anthrop
     api_base: "url"
 ```
 
-## 使用技巧
+## cc命令
 
 ```
 # 在Claude正在干活的时候插一个问题进去，但这个问题不会被加入对话历史。
