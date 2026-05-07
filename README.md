@@ -1,5 +1,7 @@
 # 26-Q2
 
+[05 AI: Prompt, Skill, Tool, Plugin, MCP, Agent](26-Q2/05_ai.md)
+
 [04 bluespec-lsp](26-Q2/04_bsvlsp.md)
 
 [03 Hermes Startup](26-Q2/03_hermes.md)
