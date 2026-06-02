@@ -1,5 +1,7 @@
 # Claude Code Startup
 
+--dangerously-skip-permissions 加上它 非常省劲
+
 ## skills
 
 ```
