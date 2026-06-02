@@ -21,6 +21,20 @@ https://github.com/affaan-m/everything-claude-code/blob/main/README.zh-CN.md
 
 ```
 如果遇到：
+litellm.exceptions.APIConnectionError: litellm.APIConnectionError: ModelstudioException - AsyncCompletions.create() got an unexpected keyword argument 'stop_sequences'
+修改~/.local/share/uv/tools/litellm/lib/python3.10/site-packages/litellm/llms/anthropic/experimental_pass_through/adapters/handler.py里面的：
+completion_response = await litellm.acompletion(
+    **completion_kwargs
+)
+成为
+if "stop_sequences" in completion_kwargs:
+    completion_kwargs["stop"] = completion_kwargs.pop("stop_sequences")
+
+completion_response = await litellm.acompletion(
+    **completion_kwargs
+)
+
+如果遇到：
 litellm.exceptions.APIConnectionError: litellm.APIConnectionError: ModelstudioException - AsyncCompletions.create() got an unexpected keyword argument 'output_config'. Received Model Group=Qwen3.5-397B-A17B
 修改experimental_pass_through/adapters/handler.py里面的：
 completion_response = await litellm.acompletion(**completion_kwargs)
