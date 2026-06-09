@@ -1,5 +1,7 @@
 # 26-Q2
 
+[06 Spec Kit](26-Q2/06_speckit.md)
+
 [05 AI: Prompt, Skill, Tool, Plugin, MCP, Agent](26-Q2/05_ai.md)
 
 [04 bluespec-lsp](26-Q2/04_bsvlsp.md)
