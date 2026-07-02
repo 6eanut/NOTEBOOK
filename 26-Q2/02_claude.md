@@ -1,6 +1,9 @@
 # Claude Code Startup
 
---dangerously-skip-permissions 加上它 非常省劲
+## 杂
+
+* --dangerously-skip-permissions 加上它 非常省劲
+* 最近web端的claude通过向用户提示词里注入时区/地区相关的信息，把中国的用户给封了，为了防止claude code自动更新也发生同样的事情，需要设置环境变量export DISABLE_AUTOUPDATER=1
 
 ## skills
 
