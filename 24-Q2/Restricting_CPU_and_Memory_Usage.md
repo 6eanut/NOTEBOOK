@@ -1,5 +1,29 @@
 # 1 Restricting CPU and Memory Usage
 
+工作环境中，会存在多个人用一台机器的情况，如果有人在跑程序时，不小心把机器的cpu都占满了，导致其他人基本无法正常使用应该怎么办？
+
+第一步，先查uid
+
+```
+id username
+```
+
+第二步，限制cpu使用率
+
+```
+systemctl set-property user-uid.slice CPUQuota=xxx%
+```
+
+（xxx%:如果是100%，则说明只能用1个cpu，假如机器有10个cpu，有5个人在用，那么可以给每个人设置200%）
+
+第三步，恢复的方式
+
+```
+systemctl set-property user-uid.slice CPUQuota=
+```
+
+----------
+
 最近在鲲鹏920上跑tensorflow的models，虽然内存16G、16核，但是跑一些大模型时会出现cpu和内存的利用率较高，达到百分之八十以上，然后总共110个steps，运行到60左右就停掉了。
 
 benchmark的终端还是显示未终止，但是top查看进程会发现已经断掉了，所以想着限制一下一个进程运行时的cpu和内存的利用率。
